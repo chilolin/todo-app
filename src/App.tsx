@@ -1,6 +1,6 @@
 import React from 'react';
-import TaskBoard from 'containers/organisms/TaskBoard';
+import CreateForm from 'containers/organisms/CreateForm';
 
-const App: React.FC = () => <TaskBoard />;
+const App: React.FC = () => <CreateForm />;
 
 export default App;

@@ -2,17 +2,17 @@ import React, { FC } from 'react';
 import FormInput from 'components/molecules/FormInput';
 
 type Props = {
-  handleSubmit: () => void;
-  handleChange: () => void;
+  handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
+  handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   title: string;
-  deadline: Date;
+  deadline: string;
 };
 
-const TaskEditor: FC<Props> = ({
+const CreateForm: FC<Props> = ({
   handleSubmit = () => undefined,
   handleChange = () => undefined,
   title = '',
-  deadline = undefined,
+  deadline = '',
 }) => (
   <>
     <h2>作成ページ</h2>
@@ -25,7 +25,7 @@ const TaskEditor: FC<Props> = ({
         label="タイトル"
       />
       <FormInput
-        name="title"
+        name="deadline"
         type="text"
         handleChange={handleChange}
         value={deadline}
@@ -36,4 +36,4 @@ const TaskEditor: FC<Props> = ({
   </>
 );
 
-export default TaskEditor;
+export default CreateForm;

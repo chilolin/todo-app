@@ -1,8 +1,8 @@
 import React, { FC, useState } from 'react';
-import CreateForm from 'components/organisms/CreateForm';
+import UpdateForm from 'components/organisms/UpdateForm';
 
-const EnhancedCreateForm: FC = () => {
-  const [createTask, setCreateTask] = useState<{
+const EnhancedUpdateForm: FC = () => {
+  const [updateTask, setUpdateTask] = useState<{
     title: string;
     deadline: string;
   }>({
@@ -20,20 +20,24 @@ const EnhancedCreateForm: FC = () => {
     e.preventDefault();
     const { name, value } = e.target;
 
-    console.log(name);
-    console.log(value);
+    setUpdateTask({ ...updateTask, [name]: value });
+  };
 
-    setCreateTask({ ...createTask, [name]: value });
+  const deleteHandleClick: (e: React.MouseEvent<HTMLButtonElement>) => void = (
+    e,
+  ) => {
+    e.preventDefault();
   };
 
   return (
-    <CreateForm
+    <UpdateForm
       handleSubmit={handleSubmit}
       handleChange={handleChange}
-      title={createTask.title}
-      deadline={createTask.deadline}
+      deleteHandleClick={deleteHandleClick}
+      title={updateTask.title}
+      deadline={updateTask.deadline}
     />
   );
 };
 
-export default EnhancedCreateForm;
+export default EnhancedUpdateForm;

@@ -3,7 +3,7 @@ import React, { FC } from 'react';
 type Props = {
   name: string;
   type: string;
-  handleChange: () => void;
+  handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   value: string;
   label: string;
   required?: boolean;
