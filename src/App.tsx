@@ -1,6 +1,7 @@
-import React from 'react';
-import CreateForm from 'containers/organisms/CreateForm';
+import React, { FC } from 'react';
+import TodoWidget from 'containers/templates/TodoWidget';
+import todoList from 'data';
 
-const App: React.FC = () => <CreateForm />;
+const App: FC = () => <TodoWidget initialTodoList={todoList} />;
 
 export default App;

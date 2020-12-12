@@ -15,7 +15,7 @@ const CreateForm: FC<Props> = ({
   deadline = '',
 }) => (
   <>
-    <h2>作成ページ</h2>
+    <h1>作成ページ</h1>
     <form onSubmit={handleSubmit}>
       <FormInput
         name="title"

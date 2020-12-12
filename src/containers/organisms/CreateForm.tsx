@@ -1,8 +1,11 @@
 import React, { FC, useState } from 'react';
 import CreateForm from 'components/organisms/CreateForm';
+import { TodoWidgetProps } from 'components/templates/TodoWidget';
 
-const EnhancedCreateForm: FC = () => {
-  const [createTask, setCreateTask] = useState<{
+const EnhancedCreateForm: FC<Pick<TodoWidgetProps, 'taskCreate'>> = ({
+  taskCreate = () => undefined,
+}) => {
+  const [createdTask, setCreatedTask] = useState<{
     title: string;
     deadline: string;
   }>({
@@ -12,6 +15,11 @@ const EnhancedCreateForm: FC = () => {
 
   const handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void = (e) => {
     e.preventDefault();
+    taskCreate(createdTask);
+    setCreatedTask({
+      title: '',
+      deadline: '',
+    });
   };
 
   const handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void = (
@@ -20,18 +28,15 @@ const EnhancedCreateForm: FC = () => {
     e.preventDefault();
     const { name, value } = e.target;
 
-    console.log(name);
-    console.log(value);
-
-    setCreateTask({ ...createTask, [name]: value });
+    setCreatedTask({ ...createdTask, [name]: value });
   };
 
   return (
     <CreateForm
       handleSubmit={handleSubmit}
       handleChange={handleChange}
-      title={createTask.title}
-      deadline={createTask.deadline}
+      title={createdTask.title}
+      deadline={createdTask.deadline}
     />
   );
 };

@@ -1,19 +1,17 @@
 type Task = {
   id: string;
   title: string;
-  deadline?: Date;
+  deadline?: string;
   createdAt: Date;
 };
 
-const date: Date = new Date(2020, 12);
-
-const todoList: Task[] = [
-  {
+const todoList: { [id: string]: Task } = {
+  '1': {
     id: '1',
     title: 'task1',
-    deadline: date,
-    createdAt: date,
+    deadline: '12/12',
+    createdAt: new Date(2020, 12, 12),
   },
-];
+};
 
 export default todoList;

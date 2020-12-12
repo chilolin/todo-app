@@ -1,24 +1,20 @@
 import React, { FC } from 'react';
 import TaskItem from 'components/molecules/TaskItem';
-
-type Task = {
-  id: string;
-  title: string;
-  deadline?: Date;
-  createdAt: Date;
-};
+import { Task } from 'containers/templates/TodoWidget';
 
 type Props = {
-  todoList: Task[];
+  todoList: { [id: string]: Task };
 };
 
 const TaskBoard: FC<Props> = ({ todoList }) => (
   <>
     <h1>Todoリスト</h1>
     <ul>
-      {todoList.map(({ id = '', title = '', deadline = undefined }) => (
-        <TaskItem key={id} title={title} deadline={deadline} />
-      ))}
+      {Object.values(todoList).map(
+        ({ id = '', title = '', deadline = undefined }) => (
+          <TaskItem key={id} title={title} deadline={deadline} />
+        ),
+      )}
     </ul>
   </>
 );
