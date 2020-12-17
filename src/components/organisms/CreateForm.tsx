@@ -2,21 +2,21 @@ import React, { FC } from 'react';
 import FormInput from 'components/molecules/FormInput';
 
 type Props = {
-  handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
-  handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   title: string;
   deadline: string;
+  taskCreatedHandleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
+  handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
 const CreateForm: FC<Props> = ({
-  handleSubmit = () => undefined,
-  handleChange = () => undefined,
   title = '',
   deadline = '',
+  taskCreatedHandleSubmit = () => undefined,
+  handleChange = () => undefined,
 }) => (
   <>
     <h1>作成ページ</h1>
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={taskCreatedHandleSubmit}>
       <FormInput
         name="title"
         type="text"

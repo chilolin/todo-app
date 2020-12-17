@@ -1,23 +1,56 @@
 import React, { FC, useState } from 'react';
+import { useHistory, useParams } from 'react-router-dom';
+import { firebaseTaskUpdated, firebaseTaskDeleted } from 'firebase.utils';
+
 import UpdateForm from 'components/organisms/UpdateForm';
-import { TodoWidgetProps } from 'components/templates/TodoWidget';
 
-const EnhancedUpdateForm: FC<
-  Pick<TodoWidgetProps, 'taskUpdate' | 'taskDelete'>
-> = ({ taskUpdate = () => undefined, taskDelete = () => undefined }) => {
+import { Task, TaskList } from 'containers/templates/Todo';
+
+type Props = {
+  todoList: TaskList;
+  taskUpdated: (task: Omit<Task, 'createdAt'>) => void;
+  taskDeleted: (id: string) => void;
+};
+
+const EnhancedUpdateForm: FC<Props> = ({
+  todoList = {},
+  taskUpdated = () => undefined,
+  taskDeleted = () => undefined,
+}) => {
+  const { taskId } = useParams<{ taskId: string }>();
   const [updatedTask, setUpdatedTask] = useState<{
-    id: string;
     title: string;
-    deadline: string;
+    deadline?: string;
   }>({
-    id: '',
-    title: '',
-    deadline: '',
+    title: todoList[taskId]?.title,
+    deadline: todoList[taskId]?.deadline,
   });
+  const history = useHistory();
 
-  const handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void = (e) => {
+  const taskUpdatedHandleSubmit: (
+    e: React.FormEvent<HTMLFormElement>,
+  ) => void = async (e) => {
     e.preventDefault();
-    taskUpdate(updatedTask);
+    try {
+      await firebaseTaskUpdated('todoList', { id: taskId, ...updatedTask });
+      taskUpdated({ id: taskId, ...updatedTask });
+      history.push('/');
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const taskDeletedHandleClick: (
+    e: React.MouseEvent<HTMLButtonElement>,
+  ) => void = async (e) => {
+    e.preventDefault();
+    try {
+      await firebaseTaskDeleted('todoList', taskId);
+      taskDeleted(taskId);
+      history.push('/');
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void = (
@@ -29,20 +62,17 @@ const EnhancedUpdateForm: FC<
     setUpdatedTask({ ...updatedTask, [name]: value });
   };
 
-  const deleteHandleClick: (e: React.MouseEvent<HTMLButtonElement>) => void = (
-    e,
-  ) => {
-    e.preventDefault();
-    taskDelete(updatedTask.id);
-  };
+  const { title, deadline } = updatedTask;
 
   return (
     <UpdateForm
-      handleSubmit={handleSubmit}
-      handleChange={handleChange}
-      deleteHandleClick={deleteHandleClick}
-      title={updatedTask.title}
-      deadline={updatedTask.deadline}
+      {...{
+        title,
+        deadline,
+        taskUpdatedHandleSubmit,
+        taskDeletedHandleClick,
+        handleChange,
+      }}
     />
   );
 };

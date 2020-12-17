@@ -1,10 +1,14 @@
 import React, { FC, useState } from 'react';
-import CreateForm from 'components/organisms/CreateForm';
-import { TodoWidgetProps } from 'components/templates/TodoWidget';
+import { useHistory } from 'react-router-dom';
+import { firebaseTaskCreated } from 'firebase.utils';
 
-const EnhancedCreateForm: FC<Pick<TodoWidgetProps, 'taskCreate'>> = ({
-  taskCreate = () => undefined,
-}) => {
+import CreateForm from 'components/organisms/CreateForm';
+
+import { Task } from 'containers/templates/Todo';
+
+const EnhancedCreateForm: FC<{
+  taskCreated: (task: Omit<Task, 'createdAt'>) => void;
+}> = ({ taskCreated = () => undefined }) => {
   const [createdTask, setCreatedTask] = useState<{
     title: string;
     deadline: string;
@@ -12,14 +16,23 @@ const EnhancedCreateForm: FC<Pick<TodoWidgetProps, 'taskCreate'>> = ({
     title: '',
     deadline: '',
   });
+  const history = useHistory();
 
-  const handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void = (e) => {
+  const taskCreatedHandleSubmit: (
+    e: React.FormEvent<HTMLFormElement>,
+  ) => void = async (e) => {
     e.preventDefault();
-    taskCreate(createdTask);
-    setCreatedTask({
-      title: '',
-      deadline: '',
-    });
+    try {
+      const id = await firebaseTaskCreated('todoList', createdTask);
+      taskCreated({ id, ...createdTask });
+      history.push('/');
+      setCreatedTask({
+        title: '',
+        deadline: '',
+      });
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void = (
@@ -31,12 +44,11 @@ const EnhancedCreateForm: FC<Pick<TodoWidgetProps, 'taskCreate'>> = ({
     setCreatedTask({ ...createdTask, [name]: value });
   };
 
+  const { title, deadline } = createdTask;
+
   return (
     <CreateForm
-      handleSubmit={handleSubmit}
-      handleChange={handleChange}
-      title={createdTask.title}
-      deadline={createdTask.deadline}
+      {...{ title, deadline, taskCreatedHandleSubmit, handleChange }}
     />
   );
 };

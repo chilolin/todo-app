@@ -2,23 +2,23 @@ import React, { FC } from 'react';
 import FormInput from 'components/molecules/FormInput';
 
 type Props = {
-  handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
-  handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  deleteHandleClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
   title: string;
-  deadline: string;
+  deadline?: string;
+  taskUpdatedHandleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
+  taskDeletedHandleClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
 const UpdateForm: FC<Props> = ({
-  handleSubmit = () => undefined,
-  handleChange = () => undefined,
-  deleteHandleClick = () => undefined,
   title = '',
   deadline = '',
+  taskUpdatedHandleSubmit = () => undefined,
+  taskDeletedHandleClick = () => undefined,
+  handleChange = () => undefined,
 }) => (
   <>
     <h1>更新ページ</h1>
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={taskUpdatedHandleSubmit}>
       <FormInput
         name="title"
         type="text"
@@ -34,7 +34,7 @@ const UpdateForm: FC<Props> = ({
         label="期日"
       />
       <button type="submit">更新する</button>
-      <button type="button" onClick={deleteHandleClick}>
+      <button type="button" onClick={taskDeletedHandleClick}>
         削除する
       </button>
     </form>
