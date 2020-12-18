@@ -3,7 +3,7 @@
 import React, { FC, useEffect, useReducer, useState } from 'react';
 import { Switch, Route } from 'react-router-dom';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import firebase from 'firebase/app';
+import { firestore } from 'firebase.utils';
 
 import TaskBoard from 'containers/organisms/TaskBoard';
 import CreateForm from 'containers/organisms/CreateForm';
@@ -75,7 +75,6 @@ const todoSlice = createSlice({
 });
 
 const Todo: FC<{ initialState: TaskList }> = ({ initialState }) => {
-  const firestore = firebase.firestore();
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [state, dispatch] = useReducer(
     todoSlice.reducer,
