@@ -39,6 +39,41 @@ Instead, it will copy all the configuration files and the transitive dependencie
 
 You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
 
+### `yarn lint`
+
+lintチェックが走る。
+`lint:es`コマンドと`lint:style`コマンドが実行される。
+
+### `yarn lint:fix`
+
+自動整形モードでlintが走る。
+`lint:es:fix`コマンドと`lint:style:fix`コマンドが実行される。
+
+### `yarn lint:es`
+
+srcディレクトリ配下のjs,jsx,ts,tsxファイルにESLintで設定したルールに従って、lintチェックが走る。
+
+### `yarn lint:es:fix`
+
+srcディレクトリ配下のjs,jsx,ts,tsxファイルにESLintで設定したルールに従って、自動整形モードでlintが走る。
+
+### `yarn lint:style`
+
+srcディレクトリ配下のcssファイルにstylelintで設定したルールに従って、lintチェックが走る。
+
+### `yarn lint:style:fix`
+
+srcディレクトリ配下のcssファイルにstylelintで設定したルールに従って、自動整形モードでlintが走る。
+
+### `yarn lint:conflict`
+
+ESLintで設定したルールとPrettierで設定したルールが衝突していないか調べる。
+
+### `yarn postinstall`
+
+パッケージがインストールされた後に自動的に実行される。手動でも実行できる。
+型定義パッケージを自動管理する。
+
 ## Learn More
 
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
