@@ -1,16 +1,24 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter } from 'react-router-dom';
-import 'index.css';
+import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
+import { Provider } from 'react-redux';
 import App from 'App';
 import reportWebVitals from 'reportWebVitals';
 
+import todoSlice from 'features/todo';
+
+const middleware = getDefaultMiddleware({ serializableCheck: false });
+const store = configureStore({
+  reducer: todoSlice.reducer,
+  middleware,
+});
+
 ReactDOM.render(
-  <BrowserRouter>
+  <Provider store={store}>
     <React.StrictMode>
       <App />
     </React.StrictMode>
-  </BrowserRouter>,
+  </Provider>,
   document.getElementById('root'),
 );
 

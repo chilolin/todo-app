@@ -1,66 +1,60 @@
 import React, { FC, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import { firebaseTaskConvert } from 'firebase.utils';
+
+import todoSlice from 'features/todo';
 
 import TaskItem from 'components/molecules/TaskItem';
 
 type Props = {
   id: string;
   title: string;
-  deadline: string;
+  deadline?: string;
   isDone?: boolean;
-  taskDone?: (id: string) => void;
-  taskTodo?: (id: string) => void;
 };
 
 const EnhancedTaskItem: FC<Props> = ({
   id = '',
   title = '',
-  deadline = '',
+  deadline = undefined,
   isDone = false,
-  taskDone = () => undefined,
-  taskTodo = () => undefined,
 }) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const history = useHistory();
+  const dispatch = useDispatch();
+  const { taskDone, taskTodo } = todoSlice.actions;
 
-  const toUpdatePageHandleClick = () => {
-    history.push(`/update/${id}`);
-  };
-
-  const taskDoneHandleClick = async () => {
+  const handleTaskDoneClick = async () => {
     setIsLoading(true);
     try {
       await firebaseTaskConvert(id, 'todoList', 'doneList');
-      taskDone(id);
+      dispatch(taskDone(id));
       setIsLoading(false);
     } catch (error) {
-      console.error(error);
+      setIsLoading(true);
     }
   };
 
-  const taskTodoHandleClick = async () => {
+  const handleTaskTodoClick = async () => {
     setIsLoading(true);
     try {
       await firebaseTaskConvert(id, 'doneList', 'todoList');
-      taskTodo(id);
+      dispatch(taskTodo(id));
       setIsLoading(false);
     } catch (error) {
-      console.error(error);
+      setIsLoading(true);
     }
   };
 
-  return isLoading ? (
-    <div>変更中・・・</div>
-  ) : (
+  return (
     <TaskItem
       {...{
+        id,
         title,
         deadline,
+        isLoading,
         isDone,
-        toUpdatePageHandleClick,
-        taskDoneHandleClick,
-        taskTodoHandleClick,
+        handleTaskDoneClick,
+        handleTaskTodoClick,
       }}
     />
   );

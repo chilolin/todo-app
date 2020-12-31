@@ -1,179 +1,81 @@
 /* eslint-disable no-param-reassign */
-import React, { FC, useCallback, useEffect, useReducer, useState } from 'react';
-import { Switch, Route } from 'react-router-dom';
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import React, { FC, useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { firestore } from 'firebase.utils';
 
-import TaskBoard from 'containers/organisms/TaskBoard';
-import CreateForm from 'containers/organisms/CreateForm';
-import UpdateForm from 'containers/organisms/UpdateForm';
-import Spinner from 'components/molecules/Spinner/Spinner';
+import todoSlice, { Task, TaskList } from 'features/todo';
 
-export type Task = {
-  id: string;
-  title: string;
-  deadline?: string;
-  createdAt: Date;
-};
+import Todo from 'components/templates/Todo';
 
-export type TaskList = {
-  [id: string]: Task;
-};
-
-type TodoState = {
-  todoList: TaskList;
-  doneList: TaskList;
-};
-
-const todoSlice = createSlice({
-  name: 'todo',
-  initialState: { todoList: {}, doneList: {} } as TodoState,
-  reducers: {
-    fetchTodoList: (state, action: PayloadAction<TaskList>) => {
-      state.todoList = action.payload;
-    },
-    fetchDoneList: (state, action: PayloadAction<TaskList>) => {
-      state.doneList = action.payload;
-    },
-    taskCreated: (state, action: PayloadAction<Omit<Task, 'createdAt'>>) => {
-      const { id } = action.payload;
-      const createdAt = new Date();
-      state.todoList[id] = { ...action.payload, id, createdAt };
-    },
-    taskDone: (state, action: PayloadAction<string>) => {
-      const id = action.payload;
-      const task = state.todoList[id];
-
-      if (task) {
-        state.doneList[id] = { ...task };
-        delete state.todoList[id];
-      }
-    },
-    taskTodo: (state, action: PayloadAction<string>) => {
-      const id = action.payload;
-      const task = state.doneList[id];
-
-      if (task) {
-        state.todoList[id] = { ...task };
-        delete state.doneList[id];
-      }
-    },
-    taskUpdated: (state, action: PayloadAction<Omit<Task, 'createdAt'>>) => {
-      const { id, ...data } = action.payload;
-      const task = state.todoList[id];
-
-      if (task) state.todoList[id] = { ...task, ...data };
-    },
-    taskDeleted: (state, action: PayloadAction<string>) => {
-      const id = action.payload;
-      const task = state.todoList[id];
-
-      if (task) delete state.todoList[id];
-    },
-  },
-});
-
-const Todo: FC<{ initialState: TaskList }> = ({ initialState }) => {
+const EnhancedTodo: FC = () => {
+  const { fetchDoneList, fetchTodoList } = todoSlice.actions;
+  const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [state, dispatch] = useReducer(
-    todoSlice.reducer,
-    initialState,
-    (taskList: TaskList): TodoState => ({
-      todoList: taskList,
-      doneList: taskList,
-    }),
-  );
-  const {
-    fetchTodoList,
-    fetchDoneList,
-    taskCreated,
-    taskDone,
-    taskTodo,
-    taskUpdated,
-    taskDeleted,
-  } = todoSlice.actions;
-
-  const fetchTaskLists = useCallback(async () => {
-    setIsLoading(true);
-    const todoSnapshot = await firestore.collection('todoList').get();
-    const transformedTodo = todoSnapshot.docs
-      .map((doc) => {
-        const { title, deadline, createdAt } = doc.data() as Task;
-
-        return {
-          id: doc.id,
-          title,
-          deadline,
-          createdAt,
-        };
-      })
-      .reduce((accumulator: TaskList, currentValue) => {
-        accumulator[currentValue.id] = currentValue;
-
-        return accumulator;
-      }, {});
-
-    const doneSnapshot = await firestore.collection('doneList').get();
-    const transformedDone = doneSnapshot.docs
-      .map((doc) => {
-        const { title, deadline, createdAt } = doc.data() as Task;
-
-        return {
-          id: doc.id,
-          title,
-          deadline,
-          createdAt,
-        };
-      })
-      .reduce((accumulator: TaskList, currentValue) => {
-        accumulator[currentValue.id] = currentValue;
-
-        return accumulator;
-      }, {});
-
-    return { transformedTodo, transformedDone };
-  }, []);
 
   useEffect(() => {
-    fetchTaskLists()
-      .then((taskLists) => {
-        dispatch(fetchTodoList(taskLists.transformedTodo));
-        dispatch(fetchDoneList(taskLists.transformedDone));
-        setIsLoading(false);
-      })
-      .catch(() => setIsLoading(true));
-  }, [fetchTaskLists, fetchTodoList, fetchDoneList]);
+    const todoUnsubscribe = firestore
+      .collection('todoList')
+      .onSnapshot((snapshot) => {
+        setIsLoading(true);
+        if (snapshot.size) {
+          const transformedTodo = snapshot.docs
+            .map((doc) => {
+              const { title, deadline, createdAt } = doc.data() as Task;
 
-  return isLoading ? (
-    <Spinner />
-  ) : (
-    <Switch>
-      <Route exact path="/">
-        <TaskBoard
-          todoList={state.todoList}
-          doneList={state.doneList}
-          taskDone={(id: string) => dispatch(taskDone(id))}
-          taskTodo={(id: string) => dispatch(taskTodo(id))}
-        />
-      </Route>
-      <Route path="/create">
-        <CreateForm
-          taskCreated={(task: Omit<Task, 'createdAt'>) =>
-            dispatch(taskCreated(task))
-          }
-        />
-      </Route>
-      <Route path="/update/:taskId">
-        <UpdateForm
-          todoList={state.todoList}
-          taskUpdated={(task: Omit<Task, 'createdAt'>) =>
-            dispatch(taskUpdated(task))
-          }
-          taskDeleted={(id: string) => dispatch(taskDeleted(id))}
-        />
-      </Route>
-    </Switch>
-  );
+              return {
+                id: doc.id,
+                title,
+                deadline,
+                createdAt,
+              };
+            })
+            .reduce((accumulator: TaskList, currentValue) => {
+              accumulator[currentValue.id] = currentValue;
+
+              return accumulator;
+            }, {});
+          dispatch(fetchTodoList(transformedTodo));
+          setIsLoading(false);
+        } else {
+          setIsLoading(false);
+        }
+      });
+
+    const doneUnsubscribe = firestore
+      .collection('doneList')
+      .onSnapshot((snapshot) => {
+        setIsLoading(true);
+        if (snapshot.size) {
+          const transformedDone = snapshot.docs
+            .map((doc) => {
+              const { title, deadline, createdAt } = doc.data() as Task;
+
+              return {
+                id: doc.id,
+                title,
+                deadline,
+                createdAt,
+              };
+            })
+            .reduce((accumulator: TaskList, currentValue) => {
+              accumulator[currentValue.id] = currentValue;
+
+              return accumulator;
+            }, {});
+          dispatch(fetchDoneList(transformedDone));
+          setIsLoading(false);
+        } else {
+          setIsLoading(false);
+        }
+      });
+
+    return () => {
+      todoUnsubscribe();
+      doneUnsubscribe();
+    };
+  }, [dispatch, fetchDoneList, fetchTodoList]);
+
+  return <Todo isLoading={isLoading} />;
 };
 
-export default Todo;
+export default EnhancedTodo;

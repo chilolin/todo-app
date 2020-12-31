@@ -1,37 +1,39 @@
 import React, { FC, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import { firebaseTaskCreated } from 'firebase.utils';
+
+import todoSlice from 'features/todo';
 
 import CreateForm from 'components/organisms/CreateForm';
 
-import { Task } from 'containers/templates/Todo';
-
-const EnhancedCreateForm: FC<{
-  taskCreated: (task: Omit<Task, 'createdAt'>) => void;
-}> = ({ taskCreated = () => undefined }) => {
+const EnhancedCreateForm: FC = () => {
+  const { taskCreated } = todoSlice.actions;
+  const dispatch = useDispatch();
   const [createdTask, setCreatedTask] = useState<{
     title: string;
-    deadline: string;
+    deadline?: string;
   }>({
     title: '',
     deadline: '',
   });
-  const history = useHistory();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isError, setIsError] = useState<boolean>(false);
 
-  const taskCreatedHandleSubmit: (
+  const handleTaskCreatedSubmit: (
     e: React.FormEvent<HTMLFormElement>,
   ) => void = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
     try {
       const id = await firebaseTaskCreated('todoList', createdTask);
-      taskCreated({ id, ...createdTask });
-      history.push('/');
+      dispatch(taskCreated({ id, ...createdTask }));
+      setIsLoading(false);
       setCreatedTask({
         title: '',
         deadline: '',
       });
     } catch (error) {
-      console.error(error);
+      setIsError(true);
     }
   };
 
@@ -46,9 +48,11 @@ const EnhancedCreateForm: FC<{
 
   const { title, deadline } = createdTask;
 
-  return (
+  return isError ? (
+    <div>エラーが発生しました。</div>
+  ) : (
     <CreateForm
-      {...{ title, deadline, taskCreatedHandleSubmit, handleChange }}
+      {...{ isLoading, title, deadline, handleTaskCreatedSubmit, handleChange }}
     />
   );
 };
