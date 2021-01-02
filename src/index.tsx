@@ -1,11 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
 import { Provider } from 'react-redux';
+import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
+
+import { todoSlice } from 'features/todo';
 import App from 'App';
 import reportWebVitals from 'reportWebVitals';
-
-import todoSlice from 'features/todo';
 
 const middleware = getDefaultMiddleware({ serializableCheck: false });
 const store = configureStore({

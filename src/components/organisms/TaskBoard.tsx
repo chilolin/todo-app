@@ -1,59 +1,86 @@
 import React, { FC } from 'react';
-
 import styled from 'styled-components';
-import TaskItem from 'containers/molecules/TaskItem';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 import { TaskList } from 'features/todo';
+import TaskItem from 'containers/molecules/TaskItem';
 
 type Props = {
-  todoList: TaskList;
+  isLoading: boolean;
   doneList: TaskList;
+  todoList: TaskList;
 };
 
-const TaskBoard: FC<Props> = ({ todoList = {}, doneList = {} }) => (
-  <BoardWrapper>
-    <ListWrapper>
-      <h2>Todoリスト</h2>
-      <ListItemWrapper>
-        {Object.values(todoList).map(
-          ({ id = '', title = '', deadline = undefined }) => (
-            <TaskItem key={id} {...{ id, title, deadline }} />
-          ),
-        )}
-      </ListItemWrapper>
-    </ListWrapper>
-    <ListWrapper>
-      <h2>Doneリスト</h2>
-      <ListItemWrapper>
-        {Object.values(doneList).map(
-          ({ id = '', title = '', deadline = undefined }) => (
-            <TaskItem key={id} {...{ id, title, deadline }} isDone />
-          ),
-        )}
-      </ListItemWrapper>
-    </ListWrapper>
-  </BoardWrapper>
+const TaskBoard: FC<Props> = ({
+  isLoading = false,
+  todoList = {},
+  doneList = {},
+}) => (
+  <>
+    {isLoading ? (
+      <CircularWrapper>
+        <CircularProgress />
+      </CircularWrapper>
+    ) : (
+      <BoardWrapper>
+        <ListWrapper>
+          <h2>Todoリスト</h2>
+          <ListItemWrapper>
+            {Object.values(todoList).map(
+              ({ id = '', title = '', deadline = undefined }) => (
+                <TaskItem key={id} {...{ id, title, deadline }} />
+              ),
+            )}
+          </ListItemWrapper>
+        </ListWrapper>
+        <ListWrapper>
+          <h2>Doneリスト</h2>
+          <ListItemWrapper>
+            {Object.values(doneList).map(
+              ({ id = '', title = '', deadline = undefined }) => (
+                <TaskItem key={id} {...{ id, title, deadline }} isDone />
+              ),
+            )}
+          </ListItemWrapper>
+        </ListWrapper>
+      </BoardWrapper>
+    )}
+  </>
 );
 
-const BoardWrapper = styled.div`
+const CircularWrapper = styled.div`
   display: flex;
-  width: 98vw;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 70vh;
+`;
+
+const BoardWrapper = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  justify-items: center;
+
+  @media screen and (max-width: 800px) {
+    grid-template-columns: 1fr;
+  }
 `;
 
 const ListWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 50vw;
-  height: 480px;
+  width: 80%;
+  height: 450px;
 `;
 
 const ListItemWrapper = styled.ul`
   display: flex;
   flex-direction: column;
   align-content: center;
-  width: 70%;
+  width: 100%;
   height: 100%;
+  padding-left: 0;
   overflow-y: scroll;
   list-style: none;
 `;

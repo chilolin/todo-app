@@ -1,5 +1,4 @@
 import React, { FC } from 'react';
-
 import Fab from '@material-ui/core/Fab';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
@@ -11,20 +10,20 @@ import EditIcon from '@material-ui/icons/Edit';
 import SpinnerButton from './SpinnerButton';
 
 type Props = {
-  open: boolean;
   isLoading: boolean;
+  isOpen: boolean;
   title: string;
   deadline?: string;
   handleOpen: () => void;
   handleClose: () => void;
-  handleTaskUpdatedClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
-  handleTaskDeletedClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
-  handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  handleTaskUpdatedClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  handleTaskDeletedClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
-const UpdateFormDialog: FC<Props> = ({
-  open = false,
+const EditFormDialog: FC<Props> = ({
   isLoading = false,
+  isOpen = false,
   title = '',
   deadline = undefined,
   handleOpen = () => undefined,
@@ -38,14 +37,15 @@ const UpdateFormDialog: FC<Props> = ({
       <EditIcon />
     </Fab>
     <Dialog
-      open={open}
+      open={isOpen}
       onClose={handleClose}
       aria-labelledby="form-dialog-title"
     >
       <DialogTitle id="form-dialog-title">編集</DialogTitle>
       <DialogContent>
         <TextField
-          id="standard-basic-update"
+          autoFocus
+          id="edit-title"
           label="やる事"
           value={title}
           onChange={handleChange}
@@ -53,10 +53,11 @@ const UpdateFormDialog: FC<Props> = ({
           InputLabelProps={{
             shrink: true,
           }}
+          disabled={isLoading}
           required
         />
         <TextField
-          id="date"
+          id="edit-date"
           label="期日"
           type="date"
           value={deadline}
@@ -65,6 +66,7 @@ const UpdateFormDialog: FC<Props> = ({
           InputLabelProps={{
             shrink: true,
           }}
+          disabled={isLoading}
         />
       </DialogContent>
       <DialogActions>
@@ -87,4 +89,4 @@ const UpdateFormDialog: FC<Props> = ({
   </>
 );
 
-export default UpdateFormDialog;
+export default EditFormDialog;

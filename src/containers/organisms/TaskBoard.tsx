@@ -1,19 +1,17 @@
 import React, { FC } from 'react';
-import { useSelector } from 'react-redux';
 
-import { TodoState } from 'features/todo';
-
+import useFetchTaskList from 'hooks/use-fetch-task-list';
 import TaskBoard from 'components/organisms/TaskBoard';
 
 const EnhancedTaskBoard: FC = () => {
-  const todoList = useSelector((state: TodoState) => state.todoList);
-  const doneList = useSelector((state: TodoState) => state.doneList);
+  const { isLoading, doneList, todoList } = useFetchTaskList();
 
   return (
     <TaskBoard
       {...{
-        todoList,
+        isLoading,
         doneList,
+        todoList,
       }}
     />
   );

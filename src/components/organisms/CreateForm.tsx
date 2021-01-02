@@ -1,5 +1,4 @@
 import React, { FC } from 'react';
-
 import styled from 'styled-components';
 import TextField from '@material-ui/core/TextField';
 
@@ -9,8 +8,8 @@ type Props = {
   isLoading: boolean;
   title: string;
   deadline?: string;
-  handleTaskCreatedSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
-  handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  handleTaskCreatedSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
+  handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
 const CreateForm: FC<Props> = ({
@@ -23,7 +22,7 @@ const CreateForm: FC<Props> = ({
   <FormWrapper onSubmit={handleTaskCreatedSubmit}>
     <div>
       <TextField
-        id="standard-basic-create"
+        id="create-title"
         label="やる事"
         value={title}
         onChange={handleChange}
@@ -31,10 +30,11 @@ const CreateForm: FC<Props> = ({
         InputLabelProps={{
           shrink: true,
         }}
+        disabled={isLoading}
         required
       />
       <TextField
-        id="date"
+        id="create-date"
         label="期日"
         type="date"
         value={deadline}
@@ -43,6 +43,7 @@ const CreateForm: FC<Props> = ({
         InputLabelProps={{
           shrink: true,
         }}
+        disabled={isLoading}
       />
     </div>
     <FormActions>
@@ -57,15 +58,13 @@ const FormWrapper = styled.form`
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 98vw;
   margin-top: 30px;
 `;
 
 const FormActions = styled.div`
   display: flex;
   justify-content: flex-end;
-  justify-items: center;
-  width: 347px;
+  width: 347.87px;
 `;
 
 export default CreateForm;

@@ -1,12 +1,11 @@
 import React, { FC } from 'react';
-
 import styled from 'styled-components';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import Button from '@material-ui/core/Button';
 import FastForwardIcon from '@material-ui/icons/FastForward';
 import FastRewindIcon from '@material-ui/icons/FastRewind';
 
-import UpdateFormDialog from 'containers/molecules/UpdateFormDialog';
+import UpdateFormDialog from 'containers/molecules/EditFormDialog';
 
 type Props = {
   isLoading: boolean;
@@ -14,8 +13,8 @@ type Props = {
   title: string;
   deadline?: string;
   isDone?: boolean;
-  handleTaskDoneClick: () => void;
-  handleTaskTodoClick: () => void;
+  handleTaskDoneClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  handleTaskTodoClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
 };
 
 const TaskItem: FC<Props> = ({
@@ -62,8 +61,8 @@ const TaskItem: FC<Props> = ({
 );
 
 const ItemWrapper = styled.li`
-  padding-bottom: 5px;
-  margin: 0 10px 10px 10px;
+  padding-bottom: 8px;
+  margin: 0 15px 5px 15px;
   border-bottom: 1px solid lightgray;
 `;
 

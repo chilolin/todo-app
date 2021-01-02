@@ -1,16 +1,11 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React, { FC } from 'react';
-
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Button from '@material-ui/core/Button';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    root: {
-      display: 'flex',
-      alignItems: 'center',
-    },
     wrapper: {
       margin: theme.spacing(1),
       position: 'relative',
