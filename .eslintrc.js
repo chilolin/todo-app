@@ -90,9 +90,10 @@ module.exports = {
         'react/jsx-props-no-spreading': [
             'error',
             {
-                html: 'enforce',
+                html: 'ignore',
                 custom: 'enforce',
                 explicitSpread: 'ignore',
+                exceptions: ["Button"],
             },
         ],
         'prefer-arrow/prefer-arrow-functions': [
@@ -104,6 +105,12 @@ module.exports = {
             },
         ],
         'no-use-before-define': 'off',
+        'no-param-reassign': [
+            'error',
+            {
+                props: false,
+            },
+        ],
     },
     overrides: [
         {

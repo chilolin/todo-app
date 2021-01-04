@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { firebaseTaskConvert } from 'firebase.utils';
+import { firebaseTaskDone, firebaseTaskTodo } from 'firebase.utils';
 import { todoSlice } from 'features/todo';
 import TaskItem from 'components/molecules/TaskItem';
 
@@ -23,6 +23,8 @@ const EnhancedTaskItem: FC<Props> = ({
   const dispatch = useDispatch();
 
   useEffect(() => {
+    setIsUnmounted(false);
+
     return () => {
       setIsUnmounted(true);
     };
@@ -37,7 +39,7 @@ const EnhancedTaskItem: FC<Props> = ({
     setIsLoading(true);
 
     try {
-      await firebaseTaskConvert(id, 'todoList', 'doneList');
+      await firebaseTaskDone(id);
       if (!isUnmounted) {
         dispatch(taskDone(id));
       }
@@ -55,7 +57,7 @@ const EnhancedTaskItem: FC<Props> = ({
     setIsLoading(true);
 
     try {
-      await firebaseTaskConvert(id, 'doneList', 'todoList');
+      await firebaseTaskTodo(id);
       if (!isUnmounted) {
         dispatch(taskTodo(id));
       }

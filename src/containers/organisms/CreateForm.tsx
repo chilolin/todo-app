@@ -26,7 +26,7 @@ const EnhancedCreateForm: FC = () => {
     setIsLoading(true);
 
     try {
-      const id = await firebaseTaskCreated('todoList', createdTask);
+      const id = await firebaseTaskCreated(createdTask);
       dispatch(taskCreated({ id, ...createdTask }));
 
       setCreatedTask({

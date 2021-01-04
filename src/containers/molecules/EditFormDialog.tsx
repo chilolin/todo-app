@@ -20,10 +20,12 @@ const EnhancedEditFormDialog: FC<{ id: string }> = ({ id = '' }) => {
   });
 
   useEffect(() => {
+    setIsUnmounted(false);
+
     return () => {
       setIsUnmounted(true);
     };
-  });
+  }, []);
 
   const { taskUpdated, taskDeleted } = todoSlice.actions;
   const { title, deadline } = updatedTask;
@@ -35,7 +37,7 @@ const EnhancedEditFormDialog: FC<{ id: string }> = ({ id = '' }) => {
     setIsLoading(true);
 
     try {
-      await firebaseTaskUpdated('todoList', {
+      await firebaseTaskUpdated({
         id,
         title,
         deadline,
@@ -58,7 +60,7 @@ const EnhancedEditFormDialog: FC<{ id: string }> = ({ id = '' }) => {
     setIsLoading(true);
 
     try {
-      await firebaseTaskDeleted('todoList', id);
+      await firebaseTaskDeleted(id);
       if (!isUnmounted) {
         dispatch(taskDeleted(id));
       }
