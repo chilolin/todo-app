@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { firebaseTaskUpdated, firebaseTaskDeleted } from 'firebase.utils';
+import firebaseUtils from 'firebase/utils';
 import { todoSlice, TodoState } from 'features/todo';
 import EditFormDialog from 'components/molecules/EditFormDialog';
 
@@ -37,10 +37,9 @@ const EnhancedEditFormDialog: FC<{ id: string }> = ({ id = '' }) => {
     setIsLoading(true);
 
     try {
-      await firebaseTaskUpdated({
+      await firebaseUtils.taskUpdated({
         id,
-        title,
-        deadline,
+        ...updatedTask,
       });
       if (!isUnmounted) {
         dispatch(taskUpdated({ id, ...updatedTask }));
@@ -60,7 +59,7 @@ const EnhancedEditFormDialog: FC<{ id: string }> = ({ id = '' }) => {
     setIsLoading(true);
 
     try {
-      await firebaseTaskDeleted(id);
+      await firebaseUtils.taskDeleted(id);
       if (!isUnmounted) {
         dispatch(taskDeleted(id));
       }

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { getTaskList } from 'firebase.utils';
+import firebaseUtils from 'firebase/utils';
 import { TaskList, todoSlice, TodoState } from 'features/todo';
 
 type ReturnValues = {
@@ -24,15 +24,15 @@ const useFetchTaskList = (): ReturnValues => {
       setIsLoading(true);
 
       try {
-        const doneTasks = await getTaskList('doneList');
-        const todoTasks = await getTaskList('todoList');
+        const doneTaskList = await firebaseUtils.getTaskList('doneList');
+        const todoTaskList = await firebaseUtils.getTaskList('todoList');
 
         if (!isUnmounted) {
-          dispatch(fetchDoneList(doneTasks));
-          dispatch(fetchTodoList(todoTasks));
+          dispatch(fetchDoneList(doneTaskList));
+          dispatch(fetchTodoList(todoTaskList));
         }
       } catch (error) {
-        throw new Error('error get task list');
+        throw new Error(error);
       } finally {
         setIsLoading(false);
       }
