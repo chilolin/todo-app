@@ -20,7 +20,7 @@ const CreateForm: FC<Props> = ({
   handleChange = () => undefined,
 }) => (
   <FormWrapper onSubmit={handleTaskCreatedSubmit}>
-    <div>
+    <FormContents>
       <TextField
         id="create-title"
         label="やる事"
@@ -45,7 +45,7 @@ const CreateForm: FC<Props> = ({
         }}
         disabled={isLoading}
       />
-    </div>
+    </FormContents>
     <FormActions>
       <SpinnerButton isLoading={isLoading} type="submit" color="primary">
         追加する
@@ -61,10 +61,27 @@ const FormWrapper = styled.form`
   margin-top: 30px;
 `;
 
+const FormContents = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: 370px;
+
+  @media screen and (max-width: 800px) {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-gap: 10px;
+    width: 250px;
+  }
+`;
+
 const FormActions = styled.div`
   display: flex;
   justify-content: flex-end;
-  width: 347.87px;
+  width: 370px;
+
+  @media screen and (max-width: 800px) {
+    width: 250px;
+  }
 `;
 
 export default CreateForm;
