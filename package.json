@@ -24,7 +24,7 @@
   },
   "scripts": {
     "start": "dotenv -e .env.local react-scripts start",
-    "build": "react-scripts build",
+    "build": "dotenv -e .env.development react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "yarn lint:es && yarn lint:style",
