@@ -1,5 +1,6 @@
 {
   "projects": {
-    "default": "yamaoka-todo-develop"
+    "default": "yamaoka-todo-production",
+    "development": "yamaoka-todo-develop"
   }
 }
