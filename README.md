@@ -56,7 +56,8 @@ $ yarn start
 
 ### B. ローカルで develop を立ち上げる場合
 
-Coming soon
+1. .env.development.local をルートに配置。
+2. `yarn serve-dev` を実行。
 
 ### C. ローカルで test を立ち上げる場合
 
@@ -89,4 +90,4 @@ Coming soon
 | --------- | ------------------ | ------------ |
 | `master`  | Coming soon        | Coming soon  |
 | `test`    | Coming soon        | Coming soon  |
-| `develop` | Coming soon        | Coming soon  |
+| `develop` | `yamaoka-todo-app` | https://yamaoka-todo-develop.web.app（エンジニア専用） |
