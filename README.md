@@ -1,4 +1,8 @@
-# 0. 目次
+# todo-app
+
+---
+
+## 0. 目次
 
 1. [環境構築](#1-環境構築)
 2. [アーキテクチャ](#2-アーキテクチャ)
@@ -6,9 +10,9 @@
 4. [デプロイ](#4-デプロイ)
 5. [ブランチルール](#5-ブランチルール)
 
----
 
-# 1. 環境構築
+
+## 1. 環境構築
 
 あらかじめ、次のアプリケーション/extentionをインストールしてください。
 
@@ -18,16 +22,17 @@
 | [Visual Studio Code](https://code.visualstudio.com/)                |                            |      |
 | [Yarn](https://classic.yarnpkg.com/ja/docs/install/#windows-stable) | 1.22.10                    | 必須 |
 | [firebase-tools](https://www.npmjs.com/package/firebase-tools)      |                            | 必須 |
+| [serve](https://www.npmjs.com/package/serve)                        |                            | 必須 |
 
----
 
-# 2. アーキテクチャ
+
+## 2. アーキテクチャ
 
 Coming soon
 
----
 
-# 3. ローカル開発
+
+## 3. ローカル開発
 
 ### A. 自分のプロジェクト
 
@@ -65,21 +70,28 @@ Coming soon
 
 ### D. ローカルで production を立ち上げる場合
 
-Coming soon
+1. .env.production.local をルートに配置。
+2. `yarn serve-prod` を実行。
 
----
+
 
 # 4. デプロイ
 
 ### A. 自分のプロジェクトをデプロイしたい場合
 
 ```bash
-# target の設定
+# hosting の target の設定
+# TARGET_NAME と RESOURCE_NAME は任意
+$ firebase target:apply hosting <TARGET_NAME> <RESOURCE_NAME>
+# デプロイ
+$ firebase deploy
 ```
 
 ### B. develop/test/production のデプロイ
 
 Coming soon
+
+
 
 # 5. ブランチルール
 
@@ -88,6 +100,6 @@ Coming soon
 
 | ブランチ  | Firebase           | ウェブサイト |
 | --------- | ------------------ | ------------ |
-| `master`  | Coming soon        | Coming soon  |
+| `master`  | `yamaoka-todo-production` | https://yamaoka-todo-production.web.app （ユーザー専用） |
 | `test`    | Coming soon        | Coming soon  |
-| `develop` | `yamaoka-todo-app` | https://yamaoka-todo-develop.web.app （エンジニア専用） |
+| `develop` | `yamaoka-todo-develop` | https://yamaoka-todo-develop.web.app （エンジニア専用） |
