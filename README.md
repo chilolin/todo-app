@@ -10,7 +10,7 @@
 4. [デプロイ](#4-デプロイ)
 5. [ブランチルール](#5-ブランチルール)
 
---
+
 
 ## 1. 環境構築
 
@@ -24,13 +24,13 @@
 | [firebase-tools](https://www.npmjs.com/package/firebase-tools)      |                            | 必須 |
 | [serve](https://www.npmjs.com/package/serve)                        |                            | 必須 |
 
---
+
 
 ## 2. アーキテクチャ
 
 Coming soon
 
---
+
 
 ## 3. ローカル開発
 
@@ -73,7 +73,7 @@ Coming soon
 1. .env.production.local をルートに配置。
 2. `yarn serve-prod` を実行。
 
---
+
 
 ## 4. デプロイ
 
@@ -91,7 +91,7 @@ $ firebase deploy
 
 Coming soon
 
---
+
 
 ## 5. ブランチルール
 
