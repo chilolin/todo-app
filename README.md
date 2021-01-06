@@ -90,4 +90,4 @@ Coming soon
 | --------- | ------------------ | ------------ |
 | `master`  | Coming soon        | Coming soon  |
 | `test`    | Coming soon        | Coming soon  |
-| `develop` | `yamaoka-todo-app` | https://yamaoka-todo-develop.web.app（エンジニア専用） |
+| `develop` | `yamaoka-todo-app` | https://yamaoka-todo-develop.web.app （エンジニア専用） |
