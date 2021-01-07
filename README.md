@@ -89,7 +89,8 @@ $ firebase deploy
 
 ### B. develop/test/production のデプロイ
 
-Coming soon
+基本的には、各 Firebase のアカウントを知っている管理者しかできないです。
+デプロイしたい場合は、issues にあげてください。
 
 
 
