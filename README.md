@@ -41,6 +41,9 @@ Coming soon
 2. Firebase のセットアップ
 
 ```bash
+$ yarn
+# build ファイルの作成
+$ yarn build-local
 # firebase にログイン
 $ firebase login
 # firebase のプロジェクトを指定
