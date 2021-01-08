@@ -14,22 +14,16 @@ export type TodoState = {
   doneList: TaskList;
 };
 
-export const FETCH_TODO_LIST = 'todo/fetchTodoList';
-export const FETCH_DONE_LIST = 'todo/fetchDoneList';
+export const FETCH_TASK_LIST = 'todo/fetchTaskList';
 export const TASK_CREATED = 'todo/taskCreated';
 export const TASK_DONE = 'todo/taskDone';
 export const TASK_TODO = 'todo/taskTodo';
 export const TASK_UPDATED = 'todo/taskUpdated';
 export const TASK_DELETED = 'todo/taskDeleted';
 
-type FetchTodoListAction = {
-  type: typeof FETCH_TODO_LIST;
-  payload: TaskList;
-};
-
-type FetchDoneListAction = {
-  type: typeof FETCH_DONE_LIST;
-  payload: TaskList;
+type FetchTaskListAction = {
+  type: typeof FETCH_TASK_LIST;
+  payload: { todoList: TaskList; doneList: TaskList };
 };
 
 type TaskCreatedAction = {
@@ -58,8 +52,7 @@ type TaskDeletedAction = {
 };
 
 export type TodoActionTypes =
-  | FetchTodoListAction
-  | FetchDoneListAction
+  | FetchTaskListAction
   | TaskCreatedAction
   | TaskDoneAction
   | TaskTodoAction

@@ -1,8 +1,7 @@
 import {
   Task,
   TaskList,
-  FETCH_TODO_LIST,
-  FETCH_DONE_LIST,
+  FETCH_TASK_LIST,
   TASK_CREATED,
   TASK_DONE,
   TASK_TODO,
@@ -11,14 +10,12 @@ import {
   TodoActionTypes,
 } from 'store/todo/types';
 
-export const fetchTodoList = (todoList: TaskList): TodoActionTypes => ({
-  type: FETCH_TODO_LIST,
-  payload: todoList,
-});
-
-export const fetchDoneList = (doneList: TaskList): TodoActionTypes => ({
-  type: FETCH_DONE_LIST,
-  payload: doneList,
+export const fetchTaskList = (
+  todoList: TaskList,
+  doneList: TaskList,
+): TodoActionTypes => ({
+  type: FETCH_TASK_LIST,
+  payload: { todoList, doneList },
 });
 
 export const taskCreated = (

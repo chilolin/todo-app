@@ -1,7 +1,8 @@
+import produce from 'immer';
+
 import {
   TodoState,
-  FETCH_TODO_LIST,
-  FETCH_DONE_LIST,
+  FETCH_TASK_LIST,
   TASK_CREATED,
   TASK_DONE,
   TASK_TODO,
@@ -9,14 +10,6 @@ import {
   TASK_DELETED,
   TodoActionTypes,
 } from 'store/todo/types';
-
-import {
-  addTaskToTodoList,
-  convertFromTodoListToDoneList,
-  convertFromDoneListToTodoList,
-  updateTaskInTodoList,
-  removeTaskFromTodoList,
-} from 'store/todo/utils';
 
 const initialState: TodoState = {
   todoList: {},
@@ -28,38 +21,68 @@ const todoReducer = (
   action: TodoActionTypes,
 ): TodoState => {
   switch (action.type) {
-    case FETCH_TODO_LIST:
+    case FETCH_TASK_LIST:
       return {
-        ...state,
-        todoList: action.payload,
-      };
-    case FETCH_DONE_LIST:
-      return {
-        ...state,
-        doneList: action.payload,
+        ...action.payload,
       };
     case TASK_CREATED:
       return {
         ...state,
-        todoList: addTaskToTodoList(state.todoList, action.payload),
+        todoList: produce(state.todoList, (draftTodoList) => {
+          const { id } = action.payload;
+          const createdAt = new Date();
+
+          draftTodoList[id] = {
+            ...action.payload,
+            createdAt,
+          };
+        }),
       };
     case TASK_DONE:
       return {
-        ...convertFromTodoListToDoneList(state, action.payload),
+        ...state,
+        ...produce(state, (draftState) => {
+          const id = action.payload;
+          const task = draftState.todoList[id];
+
+          if (task) {
+            draftState.doneList[id] = { ...task };
+            delete draftState.todoList[id];
+          }
+        }),
       };
     case TASK_TODO:
       return {
-        ...convertFromDoneListToTodoList(state, action.payload),
+        ...state,
+        ...produce(state, (draftState) => {
+          const id = action.payload;
+          const task = draftState.doneList[id];
+
+          if (task) {
+            draftState.todoList[id] = { ...task };
+            delete draftState.doneList[id];
+          }
+        }),
       };
     case TASK_UPDATED:
       return {
         ...state,
-        todoList: updateTaskInTodoList(state.todoList, action.payload),
+        todoList: produce(state.todoList, (draftTodoList) => {
+          const { id, ...data } = action.payload;
+          const task = draftTodoList[id];
+
+          if (task) draftTodoList[id] = { ...task, ...data };
+        }),
       };
     case TASK_DELETED:
       return {
         ...state,
-        todoList: removeTaskFromTodoList(state.todoList, action.payload),
+        todoList: produce(state.todoList, (draftTodoList) => {
+          const id = action.payload;
+          const task = draftTodoList[id];
+
+          if (task) delete draftTodoList[id];
+        }),
       };
     default:
       return state;
