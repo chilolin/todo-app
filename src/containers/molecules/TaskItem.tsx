@@ -2,7 +2,7 @@ import React, { FC, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import firebaseUtils from 'firebase/utils';
-import { todoSlice } from 'features/todo';
+import { taskDone, taskTodo } from 'store/todo/actions';
 import TaskItem from 'components/molecules/TaskItem';
 
 type Props = {
@@ -29,8 +29,6 @@ const EnhancedTaskItem: FC<Props> = ({
       setIsUnmounted(true);
     };
   }, []);
-
-  const { taskDone, taskTodo } = todoSlice.actions;
 
   const handleTaskDoneClick = async (
     event: React.MouseEvent<HTMLButtonElement>,

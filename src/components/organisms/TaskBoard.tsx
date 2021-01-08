@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import styled from 'styled-components';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
-import { TaskList } from 'features/todo';
+import { TaskList } from 'store/todo/types';
 import TaskItem from 'containers/molecules/TaskItem';
 
 type Props = {

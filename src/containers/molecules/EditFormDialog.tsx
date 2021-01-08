@@ -2,14 +2,15 @@ import React, { FC, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import firebaseUtils from 'firebase/utils';
-import { todoSlice, TodoState } from 'features/todo';
+import { RootState } from 'store';
+import { taskUpdated, taskDeleted } from 'store/todo/actions';
 import EditFormDialog from 'components/molecules/EditFormDialog';
 
 const EnhancedEditFormDialog: FC<{ id: string }> = ({ id = '' }) => {
   const [isUnmounted, setIsUnmounted] = useState(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const todoList = useSelector((state: TodoState) => state.todoList);
+  const todoList = useSelector((state: RootState) => state.todo.todoList);
   const dispatch = useDispatch();
   const [updatedTask, setUpdatedTask] = useState<{
     title: string;
@@ -27,7 +28,6 @@ const EnhancedEditFormDialog: FC<{ id: string }> = ({ id = '' }) => {
     };
   }, []);
 
-  const { taskUpdated, taskDeleted } = todoSlice.actions;
   const { title, deadline } = updatedTask;
 
   const handleTaskUpdatedClick = async (

@@ -2,7 +2,7 @@ import React, { FC, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import firebaseUtils from 'firebase/utils';
-import { todoSlice } from 'features/todo';
+import { taskCreated } from 'store/todo/actions';
 import CreateForm from 'components/organisms/CreateForm';
 
 const EnhancedCreateForm: FC = () => {
@@ -16,7 +16,6 @@ const EnhancedCreateForm: FC = () => {
   });
   const dispatch = useDispatch();
 
-  const { taskCreated } = todoSlice.actions;
   const { title, deadline } = createdTask;
 
   const handleTaskCreatedSubmit = async (

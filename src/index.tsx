@@ -1,17 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
+import { createStore } from 'redux';
 
-import { todoSlice } from 'features/todo';
+import rootReducer from 'store';
 import App from 'App';
 import reportWebVitals from 'reportWebVitals';
 
-const middleware = getDefaultMiddleware({ serializableCheck: false });
-const store = configureStore({
-  reducer: todoSlice.reducer,
-  middleware,
-});
+const store = createStore(rootReducer);
 
 ReactDOM.render(
   <Provider store={store}>
