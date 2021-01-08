@@ -44,7 +44,7 @@ Coming soon
 # firebase にログイン
 $ firebase login
 # firebase のプロジェクトを指定
-$ firebase use -add
+$ firebase use --add
 ? Which project do you want to add? <プロジェクト名>
 ? What alias do you want to use for this project? (e.g. staging) <任意の名前>
 # firebaseにデプロイ
@@ -56,6 +56,7 @@ $ firebase deploy
 
 ```bash
 $ yarn
+$ yarn lint:fix
 $ yarn start
 ```
 

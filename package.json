@@ -24,6 +24,7 @@
   },
   "scripts": {
     "start": "dotenv -e .env.local react-scripts start",
+    "build-local": "yarn lint:es:fix && dotenv -e .env.local react-scripts build",
     "build-dev": "dotenv -e .env.development.local react-scripts build",
     "build-test": "dotenv -e .env.test.local react-scripts build",
     "build-prod": "dotenv -e .env.production.local react-scripts build",
