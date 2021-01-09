@@ -1,87 +1,67 @@
-# todo-app
+yamaoka-todo-app
+======
+
+アプリ画面
+![App Preview](./assets/yamaoka-todo-app)
 
 ---
 
-## 0. 目次
+## 機能
 
-1. [環境構築](#1-環境構築)
-2. [アーキテクチャ](#2-アーキテクチャ)
-3. [ローカル開発](#3-ローカル開発)
-4. [デプロイ](#4-デプロイ)
-5. [ブランチルール](#5-ブランチルール)
+- Todoタスクの追加
+- Todoタスクの更新、削除
+- TodoタスクのDoneタスクへの変換
+- DoneタスクのTodoタスクへの変換
 
+---
 
+## 開発
 
-## 1. 環境構築
+### 環境
+- [Node.js](https://nodejs.org/)の最新のLTSバージョン
+- [Yarn package manager](https://yarnpkg.com/)
+- [firebase-tools](https://www.npmjs.com/package/firebase-tools)
+- [serve](https://www.npmjs.com/package/serve)
 
-あらかじめ、次のアプリケーション/extentionをインストールしてください。
+### メインブランチ
+- `master`（リリース可能な状態） https://yamaoka-todo-production.web.app
+- `develop`（開発専用） https://yamaoka-todo-develop.web.app
 
-| 名前                                                                | バージョン（必要なら明記） | 条件 |
-| ------------------------------------------------------------------- | -------------------------- | ---- |
-| [Node.js](https://nodejs.org/en/)                                   | 14.4.0                     | 必須 |
-| [Visual Studio Code](https://code.visualstudio.com/)                |                            |      |
-| [Yarn](https://classic.yarnpkg.com/ja/docs/install/#windows-stable) | 1.22.10                    | 必須 |
-| [firebase-tools](https://www.npmjs.com/package/firebase-tools)      |                            | 必須 |
-| [serve](https://www.npmjs.com/package/serve)                        |                            | 必須 |
+### コントリビュートしたい場合
 
+`develop` ブランチにプルリクエストを送信してください。
 
+### ローカル開発
 
-## 2. アーキテクチャ
+1. リポジトリをフォークする
 
-Coming soon
-
-
-
-## 3. ローカル開発
-
-### A. 自分のプロジェクト
-
-1. ルートに .env.local を配置（.env.sample を参照のこと）
-
-2. Firebase のセットアップ
+2. フォークのローカルクローンを作製し、ルートに移動
 
 ```bash
-$ yarn
-# build ファイルの作成
-$ yarn build-local
-# firebase にログイン
+$ git clone https://github.com/chilolin/todo-app.git
+$ cd todo-app
+$ yarn install
+$ yarn lint:fix
+```
+
+3. .env.local をルートに配置。（.env.sample を参照）
+
+4. Firebaseのセットアップ
+
+```bash
 $ firebase login
-# firebase のプロジェクトを指定
+# firebaseのプロジェクトを指定
 $ firebase use --add
 ? Which project do you want to add? <プロジェクト名>
 ? What alias do you want to use for this project? (e.g. staging) <任意の名前>
-# firebaseにデプロイ
-# 最初は firestore のルールをデプロイする必要がある
+# build ファイルの作成
+$ yarn build
 $ firebase deploy
 ```
 
-3. ローカルサーバの立ち上げ
+5.  `yarn start` でローカルサーバ（http://localhost:3000）の立ち上げ
 
-```bash
-$ yarn
-$ yarn lint:fix
-$ yarn start
-```
-
-### B. ローカルで develop を立ち上げる場合
-
-1. .env.development.local をルートに配置。
-2. `yarn serve-dev` を実行。
-
-### C. ローカルで test を立ち上げる場合
-
-Coming soon
-
-### D. ローカルで production を立ち上げる場合
-
-1. .env.production.local をルートに配置。
-2. `yarn serve-prod` を実行。
-
-
-
-## 4. デプロイ
-
-### A. 自分のプロジェクトをデプロイしたい場合
+6. デプロイ
 
 ```bash
 # hosting の target の設定
@@ -91,20 +71,3 @@ $ firebase target:apply hosting <TARGET_NAME> <RESOURCE_NAME>
 $ firebase deploy
 ```
 
-### B. develop/test/production のデプロイ
-
-基本的には、各 Firebase のアカウントを知っている管理者しかできないです。
-デプロイしたい場合は、issues にあげてください。
-
-
-
-## 5. ブランチルール
-
-基本的には develop ブランチをベースに開発し、develop ブランチに対してプルリクエストを出してください（直接 push しないでください）。
-レビュー後に approve されたら、最後にapproveした人がマージを行ってください（requested to change されたら、変更を行い再度レビューを申請してください）。
-
-| ブランチ  | Firebase           | ウェブサイト |
-| --------- | ------------------ | ------------ |
-| `master`  | `yamaoka-todo-production` | https://yamaoka-todo-production.web.app （ユーザー専用） |
-| `test`    | Coming soon        | Coming soon  |
-| `develop` | `yamaoka-todo-develop` | https://yamaoka-todo-develop.web.app （エンジニア専用） |
