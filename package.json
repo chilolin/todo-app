@@ -21,12 +21,10 @@
   },
   "scripts": {
     "start": "dotenv -e .env.local react-scripts start",
-    "build-local": "yarn lint:es:fix && dotenv -e .env.local react-scripts build",
+    "build": "dotenv -e .env.local react-scripts build",
     "build-dev": "dotenv -e .env.development.local react-scripts build",
-    "build-test": "dotenv -e .env.test.local react-scripts build",
     "build-prod": "dotenv -e .env.production.local react-scripts build",
     "serve-dev": "yarn build-dev && serve -s build",
-    "serve-test": "yarn build-test && serve -s build",
     "serve-prod": "yarn build-prod && serve -s build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
