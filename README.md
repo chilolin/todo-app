@@ -2,7 +2,7 @@ yamaoka-todo-app
 ======
 
 アプリ画面
-![App Preview](./assets/yamaoka-todo-app)
+![App Preview](./assets/yamaoka-todo-app.png)
 
 ---
 
@@ -24,8 +24,8 @@ yamaoka-todo-app
 - [serve](https://www.npmjs.com/package/serve)
 
 ### メインブランチ
-- `master`（リリース可能な状態） https://yamaoka-todo-production.web.app
-- `develop`（開発専用） https://yamaoka-todo-develop.web.app
+- `master`（リリース可能な状態）URL: https://yamaoka-todo-production.web.app
+- `develop`（開発専用）URL: https://yamaoka-todo-develop.web.app
 
 ### コントリビュートしたい場合
 
@@ -59,7 +59,7 @@ $ yarn build
 $ firebase deploy
 ```
 
-5.  `yarn start` でローカルサーバ（http://localhost:3000）の立ち上げ
+5.  `yarn start` でボート番号3000のローカルサーバの立ち上げ
 
 6. デプロイ
 
