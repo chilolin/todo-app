@@ -61,7 +61,7 @@ $ firebase deploy
 
 5.  `yarn start` でボート番号3000のローカルサーバの立ち上げ
 
-6. デプロイ
+6. デプロイしたい場合
 
 ```bash
 # hosting の target の設定
