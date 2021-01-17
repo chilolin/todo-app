@@ -58,6 +58,8 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: "10"
+      - name: Install Firebase CLI
+        run: yarn global add firebase-tools
       - name: Deploy To Firebase
         working-directory: .github/scripts
         run: |
