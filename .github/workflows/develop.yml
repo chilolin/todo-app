@@ -1,0 +1,65 @@
+name: develop
+
+on:
+  push:
+    branches:
+      - develop
+
+env:
+  FIREBASE_API_KEY: ${{secrets.DEV_FIREBASE_API_KEY}}
+  FIREBASE_AUTH_DOMAIN: ${{secrets.DEV_FIREBASE_AUTH_DOMAIN}}
+  FIREBASE_PROJECT_ID: ${{secrets.DEV_FIREBASE_PROJECT_ID}}
+  FIREBASE_STORAGE_BUCKET: ${{secrets.DEV_FIREBASE_STORAGE_BUCKET}}
+  FIREBASE_MESSAGING_SENDER_ID: ${{secrets.DEV_FIREBASE_MESSAGING_SENDER_ID}}
+  FIREBASE_APP_ID: ${{secrets.DEV_FIREBASE_APP_ID}}
+  FIREBASE_MEASUREMENT: ${{secrets.DEV_FIREBASE_MEASUREMENT}}
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@master
+      - name: Generate .env
+        working-directory: scripts
+        env:
+          ENV_NAME: .env.development.local
+        run: |
+          chmod +x ./env.sh
+          ./env.sh
+          mv .env.development.local ../../.env.development.local
+          cd .. && cd .. && ls -la
+      - name: Install Dependencies And DevDependencies
+        run: yarn install
+      - name: Lint
+        run: yarn lint:es:fix
+      - name: Build
+        run: yarn build-dev
+      - name: Archive Production Artifact
+        uses: actions/upload-artifact@master
+        with:
+          name: build
+          path: build
+
+  deploy:
+    name: Deploy
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@master
+      - name: Download Artifact
+        uses: actions/download-artifact@master
+        with:
+          name: build
+          path: build
+      - name: Set Up Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: "10"
+      - name: Deploy To Firebase
+        working-directory: scripts
+        run: |
+          chmod +x ./firebase.sh
+          ./firebase.sh
