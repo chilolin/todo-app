@@ -22,7 +22,7 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@master
       - name: Generate .env
-        working-directory: scripts
+        working-directory: .github/scripts
         env:
           ENV_NAME: .env.development.local
         run: |
@@ -59,7 +59,7 @@ jobs:
         with:
           node-version: "10"
       - name: Deploy To Firebase
-        working-directory: scripts
+        working-directory: .github/scripts
         run: |
           chmod +x ./firebase.sh
           ./firebase.sh
