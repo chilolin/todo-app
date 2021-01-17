@@ -59,7 +59,7 @@ jobs:
         with:
           node-version: "10"
       - name: Install Firebase CLI
-        run: yarn global add firebase-tools
+        run: npm install -g firebase-tools
       - name: Deploy To Firebase
         working-directory: .github/scripts
         run: |
