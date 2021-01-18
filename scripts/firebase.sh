@@ -9,9 +9,8 @@ fi
 
 if [ -n "$FIREBASE_PROJECT_ID" ]; then
   echo "Setting firebase project to $FIREBASE_PROJECT_ID"
-  firebase use "$FIREBASE_PROJECT_ID"
 fi
 
 echo "Target was set. Will deploy"
 
-firebase deploy
+firebase deploy --token "$FIREBASE_TOKEN" "$FIREBASE_PROJECT_ID"
