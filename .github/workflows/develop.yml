@@ -6,14 +6,14 @@ on:
       - develop
 
 env:
-  FIREBASE_API_KEY: ${{secrets.DEV_FIREBASE_API_KEY}}
-  FIREBASE_AUTH_DOMAIN: ${{secrets.DEV_FIREBASE_AUTH_DOMAIN}}
-  FIREBASE_PROJECT_ID: ${{secrets.DEV_FIREBASE_PROJECT_ID}}
-  FIREBASE_STORAGE_BUCKET: ${{secrets.DEV_FIREBASE_STORAGE_BUCKET}}
-  FIREBASE_MESSAGING_SENDER_ID: ${{secrets.DEV_FIREBASE_MESSAGING_SENDER_ID}}
-  FIREBASE_APP_ID: ${{secrets.DEV_FIREBASE_APP_ID}}
-  FIREBASE_MEASUREMENT: ${{secrets.DEV_FIREBASE_MEASUREMENT}}
-  FIREBASE_TOKEN: ${{secrets.FIREBASE_TOKEN}}
+  FIREBASE_API_KEY: ${{ secrets.DEV_FIREBASE_API_KEY }}
+  FIREBASE_AUTH_DOMAIN: ${{ secrets.DEV_FIREBASE_AUTH_DOMAIN }}
+  FIREBASE_PROJECT_ID: ${{ secrets.DEV_FIREBASE_PROJECT_ID }}
+  FIREBASE_STORAGE_BUCKET: ${{ secrets.DEV_FIREBASE_STORAGE_BUCKET }}
+  FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.DEV_FIREBASE_MESSAGING_SENDER_ID }}
+  FIREBASE_APP_ID: ${{ secrets.DEV_FIREBASE_APP_ID }}
+  FIREBASE_MEASUREMENT: ${{ secrets.DEV_FIREBASE_MEASUREMENT }}
+  FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
 
 jobs:
   build:
@@ -55,12 +55,10 @@ jobs:
         with:
           name: build
           path: build
-      - name: Install Firebase CLI
-        run: yarn global add firebase-tools
       - name: Deploy To Firebase
-        working-directory: scripts
+        uses: w9jds/firebase-action@master
+        with:
+          args: deploy --only hosting
         env:
-          FIREBASE_TOKEN: ${{secrets.FIREBASE_TOKEN}}
-        run: |
-          chmod +x ./firebase.sh
-          ./firebase.sh
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+          PROJECT_ID: ${{ secrets.DEV_FIREBASE_PROJECT_ID }}

@@ -13,4 +13,4 @@ fi
 
 echo "Target was set. Will deploy"
 
-firebase deploy --token "$FIREBASE_TOKEN" "$FIREBASE_PROJECT_ID"
+firebase deploy --token "$FIREBASE_TOKEN" "$FIREBASE_PROJECT"
