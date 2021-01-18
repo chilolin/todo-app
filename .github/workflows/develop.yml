@@ -59,6 +59,8 @@ jobs:
         run: yarn global add firebase-tools
       - name: Deploy To Firebase
         working-directory: scripts
+        env:
+          FIREBASE_TOKEN: ${{secrets.FIREBASE_TOKEN}}
         run: |
           chmod +x ./firebase.sh
           ./firebase.sh
