@@ -3,7 +3,7 @@ name: production
 on:
   push:
     branches:
-      - production
+      - [v1, v2]
 
 env:
   FIREBASE_API_KEY: ${{ secrets.PROD_FIREBASE_API_KEY }}

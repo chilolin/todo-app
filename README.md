@@ -24,7 +24,8 @@ yamaoka-todo-app
 - [serve](https://www.npmjs.com/package/serve)
 
 ### メインブランチ
-- `master`（リリース可能な状態）URL: https://yamaoka-todo-production.web.app
+- `v1`（リリース可能な状態）URL: https://yamaoka-todo-production.web.app
+- `test` （テスト環境）URL: https://yamaoka-todo-test-be9d9.web.app
 - `develop`（開発専用）URL: https://yamaoka-todo-develop.web.app
 
 ### コントリビュートしたい場合
@@ -70,4 +71,3 @@ $ firebase target:apply hosting <TARGET_NAME> <RESOURCE_NAME>
 # デプロイ
 $ firebase deploy
 ```
-
