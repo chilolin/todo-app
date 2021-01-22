@@ -1,0 +1,63 @@
+name: test
+
+on:
+  push:
+    branches:
+      - test
+
+env:
+  FIREBASE_API_KEY: ${{ secrets.TEST_FIREBASE_API_KEY }}
+  FIREBASE_AUTH_DOMAIN: ${{ secrets.TEST_FIREBASE_AUTH_DOMAIN }}
+  FIREBASE_PROJECT_ID: ${{ secrets.TEST_FIREBASE_PROJECT_ID }}
+  FIREBASE_STORAGE_BUCKET: ${{ secrets.TEST_FIREBASE_STORAGE_BUCKET }}
+  FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.TEST_FIREBASE_MESSAGING_SENDER_ID }}
+  FIREBASE_APP_ID: ${{ secrets.TEST_FIREBASE_APP_ID }}
+  FIREBASE_MEASUREMENT: ${{ secrets.TEST_FIREBASE_MEASUREMENT }}
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@master
+      - name: Generate .env
+        working-directory: scripts
+        env:
+          ENV_NAME: .env.development
+        run: |
+          chmod +x ./env.sh
+          ./env.sh
+          mv .env.development ../.env.development
+          cd .. && ls -la
+      - name: Install Dependencies
+        run: yarn install
+      - name: Lint
+        run: yarn lint:fix
+      - name: Build
+        run: yarn build-test
+      - name: Archive Production Artifact
+        uses: actions/upload-artifact@master
+        with:
+          name: build
+          path: build
+
+  deploy:
+    name: Deploy
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@master
+      - name: Download Artifact
+        uses: actions/download-artifact@master
+        with:
+          name: build
+          path: build
+      - name: Deploy To Firebase
+        uses: w9jds/firebase-action@master
+        with:
+          args: deploy --only hosting
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+          PROJECT_ID: ${{ secrets.TEST_FIREBASE_PROJECT_ID }}s

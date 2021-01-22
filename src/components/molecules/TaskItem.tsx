@@ -5,7 +5,7 @@ import Button from '@material-ui/core/Button';
 import FastForwardIcon from '@material-ui/icons/FastForward';
 import FastRewindIcon from '@material-ui/icons/FastRewind';
 
-import UpdateFormDialog from 'containers/molecules/EditFormDialog';
+import EditFormDialog from 'containers/molecules/EditFormDialog';
 
 type Props = {
   isLoading: boolean;
@@ -44,7 +44,7 @@ const TaskItem: FC<Props> = ({
           </Button>
         ) : (
           <ButtonWrapper>
-            <UpdateFormDialog id={id} />
+            <EditFormDialog id={id} />
             <Button
               variant="contained"
               color="primary"

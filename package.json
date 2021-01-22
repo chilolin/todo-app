@@ -20,6 +20,7 @@
   },
   "scripts": {
     "start": "dotenv -e .env.local react-scripts start",
+    "build": "dotenv -e .env.local react-scripts build",
     "build-dev": "dotenv -e .env.development react-scripts build",
     "build-test": "dotenv -e .env.test react-scripts build",
     "build-prod": "dotenv -e .env.production react-scripts build",

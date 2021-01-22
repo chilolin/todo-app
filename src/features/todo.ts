@@ -20,11 +20,10 @@ export const todoSlice = createSlice({
   name: 'todo',
   initialState: { todoList: {}, doneList: {} } as TodoState,
   reducers: {
-    fetchTodoList: (state, action: PayloadAction<TaskList>) => {
-      state.todoList = action.payload;
-    },
-    fetchDoneList: (state, action: PayloadAction<TaskList>) => {
-      state.doneList = action.payload;
+    fetchTaskList: (state, action: PayloadAction<TodoState>) => {
+      const { todoList, doneList } = action.payload;
+      state.todoList = todoList;
+      state.doneList = doneList;
     },
     taskCreated: (state, action: PayloadAction<Omit<Task, 'createdAt'>>) => {
       const { id } = action.payload;

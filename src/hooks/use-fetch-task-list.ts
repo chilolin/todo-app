@@ -18,18 +18,19 @@ const useFetchTaskList = (): ReturnValues => {
 
   useEffect(() => {
     let isUnmounted = false;
-    const { fetchDoneList, fetchTodoList } = todoSlice.actions;
+    const { fetchTaskList } = todoSlice.actions;
 
     const load = async (): Promise<void> => {
       setIsLoading(true);
 
       try {
-        const doneTaskList = await firebaseUtils.getTaskList('doneList');
         const todoTaskList = await firebaseUtils.getTaskList('todoList');
+        const doneTaskList = await firebaseUtils.getTaskList('doneList');
 
         if (!isUnmounted) {
-          dispatch(fetchDoneList(doneTaskList));
-          dispatch(fetchTodoList(todoTaskList));
+          dispatch(
+            fetchTaskList({ todoList: todoTaskList, doneList: doneTaskList }),
+          );
         }
       } catch (error) {
         throw new Error(error);
