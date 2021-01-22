@@ -48,7 +48,7 @@ const CreateForm: FC<Props> = ({
     </FormContents>
     <FormActions>
       <SpinnerButton isLoading={isLoading} type="submit" color="primary">
-        追加する!
+        追加する
       </SpinnerButton>
     </FormActions>
   </FormWrapper>
