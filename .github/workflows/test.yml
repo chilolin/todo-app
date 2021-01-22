@@ -24,11 +24,11 @@ jobs:
       - name: Generate .env
         working-directory: scripts
         env:
-          ENV_NAME: .env.development
+          ENV_NAME: .env.test
         run: |
           chmod +x ./env.sh
           ./env.sh
-          mv .env.development ../.env.development
+          mv .env.test ../.env.test
           cd .. && ls -la
       - name: Install Dependencies
         run: yarn install
