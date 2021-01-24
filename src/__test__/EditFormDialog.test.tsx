@@ -1,9 +1,7 @@
-/* eslint-disable @typescript-eslint/require-await */
 import React from 'react';
-import { unmountComponentAtNode } from 'react-dom';
 import { Provider } from 'react-redux';
 import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
-import { render, screen, act } from '@testing-library/react';
+import { render, screen, cleanup, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import { todoSlice } from 'features/todo';
@@ -15,6 +13,11 @@ const store = configureStore({
   reducer: todoSlice.reducer,
   middleware,
 });
+
+jest.mock('firebase/utils', () => ({
+  taskUpdated: () => Promise.resolve(),
+  taskDeleted: () => Promise.resolve(),
+}));
 
 jest.mock(
   '@material-ui/core/TextField',
@@ -47,23 +50,8 @@ jest.mock(
     ) : null,
 );
 
-jest.mock('firebase/utils', () => ({
-  taskUpdated: () => Promise.resolve(),
-  taskDeleted: () => Promise.resolve(),
-}));
-
-let container: Element | null = null;
-beforeEach(() => {
-  container = document.createElement('div');
-  document.body.appendChild(container);
-});
-
 afterEach(() => {
-  if (container) {
-    unmountComponentAtNode(container);
-    container.remove();
-    container = null;
-  }
+  cleanup();
 });
 
 describe('EditFormDialog', () => {
@@ -91,8 +79,9 @@ describe('EditFormDialog', () => {
     expect(updateButton).toBeInTheDocument();
     expect(deleteButton).toBeInTheDocument();
 
-    await act(async () => {
-      userEvent.click(updateButton);
+    userEvent.click(updateButton);
+    await waitFor(() => {
+      screen.debug();
     });
   });
 

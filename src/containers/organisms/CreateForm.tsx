@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 
 import firebaseUtils from 'firebase/utils';
@@ -6,6 +6,7 @@ import { todoSlice } from 'features/todo';
 import CreateForm from 'components/organisms/CreateForm';
 
 const EnhancedCreateForm: FC = () => {
+  const [isUnmounted, setIsUnmounted] = useState(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [createdTask, setCreatedTask] = useState<{
     title: string;
@@ -15,6 +16,14 @@ const EnhancedCreateForm: FC = () => {
     deadline: '',
   });
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    setIsUnmounted(false);
+
+    return () => {
+      setIsUnmounted(true);
+    };
+  }, []);
 
   const { taskCreated } = todoSlice.actions;
   const { title, deadline } = createdTask;
@@ -27,14 +36,16 @@ const EnhancedCreateForm: FC = () => {
 
     try {
       const id = await firebaseUtils.taskCreated(createdTask);
-      dispatch(taskCreated({ id, ...createdTask }));
+      if (!isUnmounted) {
+        dispatch(taskCreated({ id, ...createdTask }));
+      }
 
       setCreatedTask({
         title: '',
         deadline: '',
       });
-    } catch (error) {
-      throw new Error('error create task');
+    } catch (error: unknown) {
+      throw new Error(`Create Task Error`);
     } finally {
       setIsLoading(false);
     }
