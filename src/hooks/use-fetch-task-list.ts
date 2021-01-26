@@ -12,8 +12,8 @@ type ReturnValues = {
 
 const useFetchTaskList = (): ReturnValues => {
   const [isLoading, setIsLoading] = useState(false);
-  const doneList = useSelector((state: TodoState) => state.doneList);
   const todoList = useSelector((state: TodoState) => state.todoList);
+  const doneList = useSelector((state: TodoState) => state.doneList);
   const dispatch = useDispatch();
 
   useEffect(() => {
