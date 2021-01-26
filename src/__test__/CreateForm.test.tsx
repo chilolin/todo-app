@@ -95,15 +95,15 @@ describe('CreateFormコンポーネントのテスト', () => {
     expect(dateInputElement.disabled).toEqual(true);
     expect(buttonElement.disabled).toEqual(true);
 
-    expect(taskCreatedStub).toHaveBeenCalled();
-
     await waitFor(() => {
-      expect(titleInputElement.value).toEqual('');
-      expect(dateInputElement.value).toEqual('');
-      expect(titleInputElement.disabled).toEqual(false);
-      expect(dateInputElement.disabled).toEqual(false);
-      expect(buttonElement.disabled).toEqual(false);
+      expect(taskCreatedStub).toHaveBeenCalled();
     });
+
+    expect(titleInputElement.value).toEqual('');
+    expect(dateInputElement.value).toEqual('');
+    expect(titleInputElement.disabled).toEqual(false);
+    expect(dateInputElement.disabled).toEqual(false);
+    expect(buttonElement.disabled).toEqual(false);
   });
 
   test('firebaseがエラーを返す', async () => {
@@ -123,10 +123,10 @@ describe('CreateFormコンポーネントのテスト', () => {
 
     expect(buttonElement.disabled).toEqual(true);
 
-    expect(firebaseTaskCreatedStub).toHaveBeenCalled();
-
     await waitFor(() => {
-      expect(buttonElement.disabled).toEqual(false);
+      expect(firebaseTaskCreatedStub).toHaveBeenCalled();
     });
+
+    expect(buttonElement.disabled).toEqual(false);
   });
 });

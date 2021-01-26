@@ -80,12 +80,12 @@ describe('TaskItemコンポーネントのテスト', () => {
 
     expect(getByTestId('linear')).toBeInTheDocument();
 
-    expect(firebaseTaskDoneStub).toHaveBeenCalled();
-
     await waitFor(() => {
-      expect(queryByTestId('linear')).not.toBeInTheDocument();
-      expect(getByTestId('task-item')).toBeInTheDocument();
+      expect(firebaseTaskDoneStub).toHaveBeenCalled();
     });
+
+    expect(queryByTestId('linear')).not.toBeInTheDocument();
+    expect(getByTestId('task-item')).toBeInTheDocument();
   });
 
   test('DONEボタンを押した時にfirebaseがエラーを返す', async () => {
@@ -110,12 +110,12 @@ describe('TaskItemコンポーネントのテスト', () => {
 
     expect(getByTestId('linear')).toBeInTheDocument();
 
-    expect(firebaseTaskDoneStub).toHaveBeenCalled();
-
     await waitFor(() => {
-      expect(queryByTestId('linear')).not.toBeInTheDocument();
-      expect(getByTestId('task-item')).toBeInTheDocument();
+      expect(firebaseTaskDoneStub).toHaveBeenCalled();
     });
+
+    expect(queryByTestId('linear')).not.toBeInTheDocument();
+    expect(getByTestId('task-item')).toBeInTheDocument();
   });
 
   test('TODOボタンを押す', async () => {
@@ -135,12 +135,12 @@ describe('TaskItemコンポーネントのテスト', () => {
 
     expect(getByTestId('linear')).toBeInTheDocument();
 
-    expect(firebaseTaskTodoStub).toHaveBeenCalled();
-
     await waitFor(() => {
-      expect(queryByTestId('linear')).not.toBeInTheDocument();
-      expect(getByTestId('task-item')).toBeInTheDocument();
+      expect(firebaseTaskTodoStub).toHaveBeenCalled();
     });
+
+    expect(queryByTestId('linear')).not.toBeInTheDocument();
+    expect(getByTestId('task-item')).toBeInTheDocument();
   });
 
   test('TODOボタンを押したときにfirebaseがエラーを返す', async () => {
@@ -160,11 +160,11 @@ describe('TaskItemコンポーネントのテスト', () => {
 
     expect(getByTestId('linear')).toBeInTheDocument();
 
-    expect(firebaseTaskTodoStub).toHaveBeenCalled();
-
     await waitFor(() => {
-      expect(queryByTestId('linear')).not.toBeInTheDocument();
-      expect(getByTestId('task-item')).toBeInTheDocument();
+      expect(firebaseTaskTodoStub).toHaveBeenCalled();
     });
+
+    expect(queryByTestId('linear')).not.toBeInTheDocument();
+    expect(getByTestId('task-item')).toBeInTheDocument();
   });
 });
