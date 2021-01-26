@@ -1,7 +1,7 @@
 import React, { FC, useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 
-import firebaseUtils from 'firebase/utils';
+import { firebaseTaskCreated } from 'firebase/utils';
 import { todoSlice } from 'features/todo';
 import CreateForm from 'components/organisms/CreateForm';
 
@@ -35,7 +35,7 @@ const EnhancedCreateForm: FC = () => {
     setIsLoading(true);
 
     try {
-      const id = await firebaseUtils.taskCreated(createdTask);
+      const id = await firebaseTaskCreated(createdTask);
       if (!isUnmounted) {
         dispatch(taskCreated({ id, ...createdTask }));
       }

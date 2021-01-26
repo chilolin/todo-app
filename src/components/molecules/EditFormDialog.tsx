@@ -25,7 +25,7 @@ const EditFormDialog: FC<Props> = ({
   isLoading = false,
   isOpen = false,
   title = '',
-  deadline = undefined,
+  deadline = '',
   handleOpen = () => undefined,
   handleClose = () => undefined,
   handleTaskUpdatedClick = () => undefined,
@@ -38,7 +38,7 @@ const EditFormDialog: FC<Props> = ({
       color="secondary"
       aria-label="edit"
       onClick={handleOpen}
-      data-testid="dialog-toggle"
+      data-testid="edit-button"
     >
       <EditIcon />
     </Fab>
@@ -46,6 +46,7 @@ const EditFormDialog: FC<Props> = ({
       open={isOpen}
       onClose={handleClose}
       aria-labelledby="form-dialog-title"
+      data-testid="dialog"
     >
       <DialogTitle id="form-dialog-title">編集</DialogTitle>
       <DialogContent>
@@ -61,7 +62,6 @@ const EditFormDialog: FC<Props> = ({
           }}
           disabled={isLoading}
           required
-          data-testid="todo-input"
         />
         <TextField
           id="edit-date"
@@ -74,7 +74,6 @@ const EditFormDialog: FC<Props> = ({
             shrink: true,
           }}
           disabled={isLoading}
-          data-testid="date-input"
         />
       </DialogContent>
       <DialogActions>
@@ -82,7 +81,6 @@ const EditFormDialog: FC<Props> = ({
           isLoading={isLoading}
           onClick={handleTaskUpdatedClick}
           color="primary"
-          data-testid="update-button"
         >
           更新する
         </SpinnerButton>
@@ -90,7 +88,6 @@ const EditFormDialog: FC<Props> = ({
           isLoading={isLoading}
           onClick={handleTaskDeletedClick}
           color="secondary"
-          data-testid="delete-button"
         >
           削除する
         </SpinnerButton>

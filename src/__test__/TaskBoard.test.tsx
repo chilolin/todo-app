@@ -1,5 +1,5 @@
 import React from 'react';
-import { cleanup, render, screen } from '@testing-library/react';
+import { cleanup, render } from '@testing-library/react';
 
 import useFetchTaskList from 'hooks/use-fetch-task-list';
 
@@ -24,43 +24,55 @@ const taskList: TaskList = {
 
 jest.mock('firebase/utils');
 jest.mock('hooks/use-fetch-task-list');
-const mockUseFetchTaskList = useFetchTaskList as jest.MockedFunction<
+const useFetchTaskListStub = useFetchTaskList as jest.MockedFunction<
   typeof useFetchTaskList
 >;
 
 jest.mock(
   'containers/molecules/TaskItem',
   () => ({ id, title }: { id: string; title: string }) => (
-    <li key={id}>{title}</li>
+    <li key={id} data-testid={id}>
+      {title}
+    </li>
   ),
 );
 
-describe('TaskBoard', () => {
+describe('TaskBoardコンポーネントのテスト', () => {
   afterEach(() => {
     cleanup();
   });
 
-  test('レンダリング', () => {
-    mockUseFetchTaskList.mockReturnValue({
-      isLoading: false,
-      todoList: taskList,
-      doneList: taskList,
-    });
-    render(<TaskBoard />);
-
-    expect(screen.getByText(/Todoリスト/)).toBeInTheDocument();
-    screen.debug();
-  });
-
-  test('ローディング', () => {
-    mockUseFetchTaskList.mockReturnValue({
+  test('データ取得前のレンダリング', () => {
+    useFetchTaskListStub.mockReturnValue({
       isLoading: true,
       todoList: taskList,
       doneList: taskList,
     });
-    render(<TaskBoard />);
 
-    expect(screen.queryByText(/Todoリスト/)).not.toBeInTheDocument();
-    screen.debug();
+    const { getByTestId, queryByTestId, queryAllByTestId } = render(
+      <TaskBoard />,
+    );
+
+    expect(getByTestId('circular')).toBeInTheDocument();
+    expect(queryByTestId('board')).not.toBeInTheDocument();
+    expect(queryAllByTestId('123')).not.toHaveLength(2);
+    expect(queryAllByTestId('456')).not.toHaveLength(2);
+  });
+
+  test('データ取得後のレンダリング', () => {
+    useFetchTaskListStub.mockReturnValue({
+      isLoading: false,
+      todoList: taskList,
+      doneList: taskList,
+    });
+
+    const { getByTestId, getAllByTestId, queryByTestId } = render(
+      <TaskBoard />,
+    );
+
+    expect(queryByTestId('circular')).not.toBeInTheDocument();
+    expect(getByTestId('board')).toBeInTheDocument();
+    expect(getAllByTestId('123')).toHaveLength(2);
+    expect(getAllByTestId('456')).toHaveLength(2);
   });
 });

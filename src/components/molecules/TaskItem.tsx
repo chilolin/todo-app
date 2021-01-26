@@ -28,9 +28,9 @@ const TaskItem: FC<Props> = ({
 }) => (
   <>
     {isLoading ? (
-      <LinearProgress />
+      <LinearProgress data-testid="linear" />
     ) : (
-      <ItemWrapper>
+      <ItemWrapper data-testid="task-item">
         <p>やる事：{title}</p>
         <p>期日：{deadline}</p>
         {isDone ? (

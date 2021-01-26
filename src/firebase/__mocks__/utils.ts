@@ -11,50 +11,33 @@ const taskList: TaskList = {
   '123': task,
 };
 
-const getTaskList = async (collectionId: string): Promise<TaskList> =>
-  new Promise((resolve, reject) => {
-    process.nextTick(() => (collectionId ? resolve(taskList) : reject()));
+export const getTaskList = async (): Promise<TaskList> =>
+  new Promise((resolve) => {
+    process.nextTick(() => resolve(taskList));
   });
 
-const taskCreated = async (
-  createdTask: Pick<Task, 'title' | 'deadline'>,
-): Promise<string> =>
-  new Promise((resolve, reject) => {
+export const firebaseTaskCreated = async (): Promise<string> =>
+  new Promise((resolve) => {
     const id = '123';
-    process.nextTick(() =>
-      createdTask.title === 'test-task' ? resolve(id) : reject(),
-    );
+    process.nextTick(() => resolve(id));
   });
 
-const taskDone = async (id: string): Promise<void> =>
-  new Promise((resolve, reject) => {
-    process.nextTick(() => (id === '123' ? resolve() : reject()));
+export const firebaseTaskDone = async (): Promise<void> =>
+  new Promise((resolve) => {
+    process.nextTick(() => resolve());
   });
 
-const taskTodo = async (id: string): Promise<void> =>
-  new Promise((resolve, reject) => {
-    process.nextTick(() => (id === '123' ? resolve() : reject()));
+export const firebaseTaskTodo = async (): Promise<void> =>
+  new Promise((resolve) => {
+    process.nextTick(() => resolve());
   });
 
-const taskUpdated = async (
-  updatedTask: Omit<Task, 'createdAt'>,
-): Promise<void> =>
-  new Promise((resolve, reject) => {
-    process.nextTick(() =>
-      updatedTask.title === 'new-test-task' ? resolve() : reject(),
-    );
+export const firebaseTaskUpdated = async (): Promise<void> =>
+  new Promise((resolve) => {
+    process.nextTick(() => resolve());
   });
 
-const taskDeleted = async (id: string): Promise<void> =>
-  new Promise((resolve, reject) => {
-    process.nextTick(() => (id === '123' ? resolve() : reject()));
+export const firebaseTaskDeleted = async (): Promise<void> =>
+  new Promise((resolve) => {
+    process.nextTick(() => resolve());
   });
-
-export default {
-  getTaskList,
-  taskCreated,
-  taskDone,
-  taskTodo,
-  taskUpdated,
-  taskDeleted,
-};
