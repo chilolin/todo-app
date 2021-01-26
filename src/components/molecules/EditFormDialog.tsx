@@ -25,7 +25,7 @@ const EditFormDialog: FC<Props> = ({
   isLoading = false,
   isOpen = false,
   title = '',
-  deadline = undefined,
+  deadline = '',
   handleOpen = () => undefined,
   handleClose = () => undefined,
   handleTaskUpdatedClick = () => undefined,
@@ -33,13 +33,20 @@ const EditFormDialog: FC<Props> = ({
   handleChange = () => undefined,
 }) => (
   <>
-    <Fab size="medium" color="secondary" aria-label="edit" onClick={handleOpen}>
+    <Fab
+      size="medium"
+      color="secondary"
+      aria-label="edit"
+      onClick={handleOpen}
+      data-testid="edit-button"
+    >
       <EditIcon />
     </Fab>
     <Dialog
       open={isOpen}
       onClose={handleClose}
       aria-labelledby="form-dialog-title"
+      data-testid="dialog"
     >
       <DialogTitle id="form-dialog-title">編集</DialogTitle>
       <DialogContent>

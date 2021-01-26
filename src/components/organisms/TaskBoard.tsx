@@ -18,11 +18,11 @@ const TaskBoard: FC<Props> = ({
 }) => (
   <>
     {isLoading ? (
-      <CircularWrapper>
+      <CircularWrapper data-testid="circular">
         <CircularProgress />
       </CircularWrapper>
     ) : (
-      <BoardWrapper>
+      <BoardWrapper data-testid="board">
         <ListWrapper>
           <h2>Todoリスト</h2>
           <ListItemWrapper>
