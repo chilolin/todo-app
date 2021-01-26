@@ -124,17 +124,17 @@ describe('EditFormDialogコンポーネントのテスト', () => {
     expect(updateButtonElement.disabled).toEqual(true);
     expect(deleteButtonElement.disabled).toEqual(true);
 
-    expect(firebaseTaskUpdatedStub).toHaveBeenCalled();
-
     await waitFor(() => {
-      expect(titleInputElement.disabled).toEqual(false);
-      expect(dateInputElement.disabled).toEqual(false);
-      expect(updateButtonElement.disabled).toEqual(false);
-      expect(deleteButtonElement.disabled).toEqual(false);
-
-      expect(getByTestId('edit-button')).toBeInTheDocument();
-      expect(getByTestId('dialog')).toBeInTheDocument();
+      expect(firebaseTaskUpdatedStub).toHaveBeenCalled();
     });
+
+    expect(titleInputElement.disabled).toEqual(false);
+    expect(dateInputElement.disabled).toEqual(false);
+    expect(updateButtonElement.disabled).toEqual(false);
+    expect(deleteButtonElement.disabled).toEqual(false);
+
+    expect(getByTestId('edit-button')).toBeInTheDocument();
+    expect(getByTestId('dialog')).toBeInTheDocument();
   });
 
   test('更新ボタンを押したときfirebaseがエラーを返す', async () => {
@@ -158,14 +158,14 @@ describe('EditFormDialogコンポーネントのテスト', () => {
 
     expect(updateButtonElement.disabled).toEqual(true);
 
-    expect(firebaseTaskUpdatedStub).toHaveBeenCalled();
-
     await waitFor(() => {
-      expect(updateButtonElement.disabled).toEqual(false);
-
-      expect(getByTestId('edit-button')).toBeInTheDocument();
-      expect(getByTestId('dialog')).toBeInTheDocument();
+      expect(firebaseTaskUpdatedStub).toHaveBeenCalled();
     });
+
+    expect(updateButtonElement.disabled).toEqual(false);
+
+    expect(getByTestId('edit-button')).toBeInTheDocument();
+    expect(getByTestId('dialog')).toBeInTheDocument();
   });
 
   test('削除ボタンを押す', async () => {
@@ -195,17 +195,17 @@ describe('EditFormDialogコンポーネントのテスト', () => {
     expect(updateButtonElement.disabled).toEqual(true);
     expect(deleteButtonElement.disabled).toEqual(true);
 
-    expect(firebaseTaskDeletedStub).toHaveBeenCalled();
-
     await waitFor(() => {
-      expect(titleInputElement.disabled).toEqual(false);
-      expect(dateInputElement.disabled).toEqual(false);
-      expect(updateButtonElement.disabled).toEqual(false);
-      expect(deleteButtonElement.disabled).toEqual(false);
-
-      expect(getByTestId('edit-button')).toBeInTheDocument();
-      expect(getByTestId('dialog')).toBeInTheDocument();
+      expect(firebaseTaskDeletedStub).toHaveBeenCalled();
     });
+
+    expect(titleInputElement.disabled).toEqual(false);
+    expect(dateInputElement.disabled).toEqual(false);
+    expect(updateButtonElement.disabled).toEqual(false);
+    expect(deleteButtonElement.disabled).toEqual(false);
+
+    expect(getByTestId('edit-button')).toBeInTheDocument();
+    expect(getByTestId('dialog')).toBeInTheDocument();
   });
 
   test('削除ボタンを押したときfirebaseがエラーを返す', async () => {
@@ -229,13 +229,13 @@ describe('EditFormDialogコンポーネントのテスト', () => {
 
     expect(deleteButtonElement.disabled).toEqual(true);
 
-    expect(firebaseTaskDeletedStub).toHaveBeenCalled();
-
     await waitFor(() => {
-      expect(deleteButtonElement.disabled).toEqual(false);
-
-      expect(getByTestId('edit-button')).toBeInTheDocument();
-      expect(getByTestId('dialog')).toBeInTheDocument();
+      expect(firebaseTaskDeletedStub).toHaveBeenCalled();
     });
+
+    expect(deleteButtonElement.disabled).toEqual(false);
+
+    expect(getByTestId('edit-button')).toBeInTheDocument();
+    expect(getByTestId('dialog')).toBeInTheDocument();
   });
 });
