@@ -1,5 +1,5 @@
 import { db } from 'firebase/index';
-import { Task, TaskList } from 'features/todo';
+import { Task, TaskList } from 'features/todo/todoSlice';
 
 export const getTaskList = async (collectionId: string): Promise<TaskList> => {
   const snapshot = await db.collection(collectionId).get();

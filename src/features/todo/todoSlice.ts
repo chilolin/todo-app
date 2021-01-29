@@ -16,7 +16,7 @@ export type TodoState = {
   doneList: TaskList;
 };
 
-export const todoSlice = createSlice({
+const todoSlice = createSlice({
   name: 'todo',
   initialState: { todoList: {}, doneList: {} } as TodoState,
   reducers: {
@@ -62,3 +62,14 @@ export const todoSlice = createSlice({
     },
   },
 });
+
+export const {
+  fetchTaskList,
+  taskCreated,
+  taskDone,
+  taskTodo,
+  taskUpdated,
+  taskDeleted,
+} = todoSlice.actions;
+
+export default todoSlice.reducer;

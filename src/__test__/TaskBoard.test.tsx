@@ -3,7 +3,7 @@ import { cleanup, render } from '@testing-library/react';
 
 import useFetchTaskList from 'hooks/use-fetch-task-list';
 
-import { TaskList } from 'features/todo';
+import { TaskList } from 'features/todo/todoSlice';
 
 import TaskBoard from 'containers/organisms/TaskBoard';
 

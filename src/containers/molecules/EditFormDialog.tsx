@@ -2,7 +2,7 @@ import React, { FC, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { firebaseTaskUpdated, firebaseTaskDeleted } from 'firebase/utils';
-import { todoSlice, TodoState } from 'features/todo';
+import { taskUpdated, taskDeleted, TodoState } from 'features/todo/todoSlice';
 import EditFormDialog from 'components/molecules/EditFormDialog';
 
 const EnhancedEditFormDialog: FC<{ id: string }> = ({ id = '' }) => {
@@ -27,7 +27,6 @@ const EnhancedEditFormDialog: FC<{ id: string }> = ({ id = '' }) => {
     };
   }, []);
 
-  const { taskUpdated, taskDeleted } = todoSlice.actions;
   const { title, deadline } = updatedTask;
 
   const handleTaskUpdatedClick = async (

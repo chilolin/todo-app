@@ -4,16 +4,20 @@ import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
 import { cleanup, render, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import { todoSlice } from 'features/todo';
+import todoSlice from 'features/todo/todoSlice';
 import * as firebaseUtils from 'firebase/utils';
 
 import CreateForm from 'containers/organisms/CreateForm';
 
-const middleware = getDefaultMiddleware({ serializableCheck: false });
-const store = configureStore({
-  reducer: todoSlice.reducer,
-  middleware,
-});
+const reduxProvider = (WrappedComponent: JSX.Element) => {
+  const middleware = getDefaultMiddleware({ serializableCheck: false });
+  const store = configureStore({
+    reducer: todoSlice,
+    middleware,
+  });
+
+  return <Provider store={store}>{WrappedComponent}</Provider>;
+};
 
 jest.mock('firebase/utils');
 
@@ -40,11 +44,7 @@ describe('CreateFormコンポーネントのテスト', () => {
   });
 
   test('レンダリングする', () => {
-    const { getByLabelText, getByRole } = render(
-      <Provider store={store}>
-        <CreateForm />
-      </Provider>,
-    );
+    const { getByLabelText, getByRole } = render(reduxProvider(<CreateForm />));
 
     expect(getByLabelText(/やる事/)).toBeInTheDocument();
     expect(getByLabelText(/期日/)).toBeInTheDocument();
@@ -52,11 +52,7 @@ describe('CreateFormコンポーネントのテスト', () => {
   });
 
   test('フォームに入力する', () => {
-    const { getByLabelText } = render(
-      <Provider store={store}>
-        <CreateForm />
-      </Provider>,
-    );
+    const { getByLabelText } = render(reduxProvider(<CreateForm />));
 
     const titleInputElement = getByLabelText(/やる事/) as HTMLInputElement;
     const dateInputElement = getByLabelText(/期日/) as HTMLInputElement;
@@ -73,11 +69,7 @@ describe('CreateFormコンポーネントのテスト', () => {
       .spyOn(firebaseUtils, 'firebaseTaskCreated')
       .mockImplementation(() => Promise.resolve('123'));
 
-    const { getByLabelText, getByRole } = render(
-      <Provider store={store}>
-        <CreateForm />
-      </Provider>,
-    );
+    const { getByLabelText, getByRole } = render(reduxProvider(<CreateForm />));
 
     const titleInputElement = getByLabelText(/やる事/) as HTMLInputElement;
     const dateInputElement = getByLabelText(/期日/) as HTMLInputElement;
@@ -111,11 +103,7 @@ describe('CreateFormコンポーネントのテスト', () => {
       .spyOn(firebaseUtils, 'firebaseTaskCreated')
       .mockImplementation(() => Promise.reject());
 
-    const { getByRole } = render(
-      <Provider store={store}>
-        <CreateForm />
-      </Provider>,
-    );
+    const { getByRole } = render(reduxProvider(<CreateForm />));
 
     const buttonElement = getByRole('button') as HTMLButtonElement;
 

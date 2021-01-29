@@ -3,13 +3,13 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
 
-import { todoSlice } from 'features/todo';
+import rootReducer from 'reducers';
 import App from 'App';
 import reportWebVitals from 'reportWebVitals';
 
 const middleware = getDefaultMiddleware({ serializableCheck: false });
 const store = configureStore({
-  reducer: todoSlice.reducer,
+  reducer: rootReducer,
   middleware,
 });
 
