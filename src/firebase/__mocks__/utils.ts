@@ -1,4 +1,4 @@
-import { Task, TaskList } from 'features/todo';
+import { Task, TaskList } from 'features/todo/todoSlice';
 
 const task: Task = {
   id: '123',

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { getTaskList } from 'firebase/utils';
-import { TaskList, todoSlice, TodoState } from 'features/todo';
+import { fetchTaskList, TaskList, TodoState } from 'features/todo/todoSlice';
 
 type ReturnValues = {
   isLoading: boolean;
@@ -18,7 +18,6 @@ const useFetchTaskList = (): ReturnValues => {
 
   useEffect(() => {
     let isUnmounted = false;
-    const { fetchTaskList } = todoSlice.actions;
 
     const load = async (): Promise<void> => {
       setIsLoading(true);

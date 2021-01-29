@@ -4,16 +4,20 @@ import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
 import { render, cleanup, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import { todoSlice } from 'features/todo';
+import todoSlice from 'features/todo/todoSlice';
 import * as firebaseUtils from 'firebase/utils';
 
 import EditFormDialog from 'containers/molecules/EditFormDialog';
 
-const middleware = getDefaultMiddleware({ serializableCheck: false });
-const store = configureStore({
-  reducer: todoSlice.reducer,
-  middleware,
-});
+const reduxProvider = (WrappedComponent: JSX.Element) => {
+  const middleware = getDefaultMiddleware({ serializableCheck: false });
+  const store = configureStore({
+    reducer: todoSlice,
+    middleware,
+  });
+
+  return <Provider store={store}>{WrappedComponent}</Provider>;
+};
 
 jest.mock('firebase/utils');
 
@@ -49,9 +53,7 @@ describe('EditFormDialogコンポーネントのテスト', () => {
 
   test('レンダリングする', () => {
     const { getByTestId, queryByTestId } = render(
-      <Provider store={store}>
-        <EditFormDialog id="123" />
-      </Provider>,
+      reduxProvider(<EditFormDialog id="123" />),
     );
 
     expect(getByTestId('edit-button')).toBeInTheDocument();
@@ -60,9 +62,7 @@ describe('EditFormDialogコンポーネントのテスト', () => {
 
   test('編集ボタンを押す', () => {
     const { getByTestId, queryByTestId } = render(
-      <Provider store={store}>
-        <EditFormDialog id="123" />
-      </Provider>,
+      reduxProvider(<EditFormDialog id="123" />),
     );
 
     expect(getByTestId('edit-button')).toBeInTheDocument();
@@ -78,9 +78,7 @@ describe('EditFormDialogコンポーネントのテスト', () => {
 
   test('フォームに入力する', () => {
     const { getByTestId, getByLabelText } = render(
-      <Provider store={store}>
-        <EditFormDialog id="123" />
-      </Provider>,
+      reduxProvider(<EditFormDialog id="123" />),
     );
 
     const editButtonElement = getByTestId('edit-button');
@@ -103,9 +101,7 @@ describe('EditFormDialogコンポーネントのテスト', () => {
       .mockImplementation(() => Promise.resolve());
 
     const { getByTestId, getByLabelText } = render(
-      <Provider store={store}>
-        <EditFormDialog id="123" />
-      </Provider>,
+      reduxProvider(<EditFormDialog id="123" />),
     );
 
     const editButtonElement = getByTestId('edit-button');
@@ -142,11 +138,7 @@ describe('EditFormDialogコンポーネントのテスト', () => {
       .spyOn(firebaseUtils, 'firebaseTaskUpdated')
       .mockImplementation(() => Promise.reject());
 
-    const { getByTestId } = render(
-      <Provider store={store}>
-        <EditFormDialog id="123" />
-      </Provider>,
-    );
+    const { getByTestId } = render(reduxProvider(<EditFormDialog id="123" />));
 
     const editButtonElement = getByTestId('edit-button');
 
@@ -174,9 +166,7 @@ describe('EditFormDialogコンポーネントのテスト', () => {
       .mockImplementation(() => Promise.resolve());
 
     const { getByTestId, getByLabelText } = render(
-      <Provider store={store}>
-        <EditFormDialog id="123" />
-      </Provider>,
+      reduxProvider(<EditFormDialog id="123" />),
     );
 
     const editButtonElement = getByTestId('edit-button');
@@ -213,11 +203,7 @@ describe('EditFormDialogコンポーネントのテスト', () => {
       .spyOn(firebaseUtils, 'firebaseTaskDeleted')
       .mockImplementation(() => Promise.reject());
 
-    const { getByTestId } = render(
-      <Provider store={store}>
-        <EditFormDialog id="123" />
-      </Provider>,
-    );
+    const { getByTestId } = render(reduxProvider(<EditFormDialog id="123" />));
 
     const editButtonElement = getByTestId('edit-button');
 

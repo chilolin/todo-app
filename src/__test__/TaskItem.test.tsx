@@ -4,16 +4,20 @@ import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
 import { cleanup, render, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import { todoSlice } from 'features/todo';
+import todoSlice from 'features/todo/todoSlice';
 import * as firebaseUtils from 'firebase/utils';
 
 import TaskItem from 'containers/molecules/TaskItem';
 
-const middleware = getDefaultMiddleware({ serializableCheck: false });
-const store = configureStore({
-  reducer: todoSlice.reducer,
-  middleware,
-});
+const reduxProvider = (WrappedComponent: JSX.Element) => {
+  const middleware = getDefaultMiddleware({ serializableCheck: false });
+  const store = configureStore({
+    reducer: todoSlice,
+    middleware,
+  });
+
+  return <Provider store={store}>{WrappedComponent}</Provider>;
+};
 
 jest.mock('firebase/utils');
 
@@ -27,13 +31,15 @@ describe('TaskItemコンポーネントのテスト', () => {
   });
 
   test('todoアイテムをレンダリング', () => {
-    const title = 'test-task';
-    const deadline = '2021-01-26';
-
     const { getByTestId, getByText, getByRole } = render(
-      <Provider store={store}>
-        <TaskItem id="123" title={title} deadline={deadline} isDone={false} />
-      </Provider>,
+      reduxProvider(
+        <TaskItem
+          id="123"
+          title="test-task"
+          deadline="2021-01-26"
+          isDone={false}
+        />,
+      ),
     );
 
     expect(getByTestId('task-item')).toBeInTheDocument();
@@ -43,13 +49,10 @@ describe('TaskItemコンポーネントのテスト', () => {
   });
 
   test('doneアイテムをレンダリング', () => {
-    const title = 'test-task';
-    const deadline = '2021-01-26';
-
     const { getByTestId, getByText, getByRole } = render(
-      <Provider store={store}>
-        <TaskItem id="123" title={title} deadline={deadline} isDone />
-      </Provider>,
+      reduxProvider(
+        <TaskItem id="123" title="test-task" deadline="2021-01-26" isDone />,
+      ),
     );
 
     expect(getByTestId('task-item')).toBeInTheDocument();
@@ -64,14 +67,14 @@ describe('TaskItemコンポーネントのテスト', () => {
       .mockImplementation(() => Promise.resolve());
 
     const { getByRole, getByTestId, queryByTestId } = render(
-      <Provider store={store}>
+      reduxProvider(
         <TaskItem
           id="123"
           title="test-task"
           deadline="2021-01-01"
           isDone={false}
-        />
-      </Provider>,
+        />,
+      ),
     );
 
     const buttonElement = getByRole('button');
@@ -94,14 +97,14 @@ describe('TaskItemコンポーネントのテスト', () => {
       .mockImplementation(() => Promise.reject());
 
     const { getByRole, getByTestId, queryByTestId } = render(
-      <Provider store={store}>
+      reduxProvider(
         <TaskItem
           id="123"
           title="test-task"
           deadline="2021-01-01"
           isDone={false}
-        />
-      </Provider>,
+        />,
+      ),
     );
 
     const buttonElement = getByRole('button');
@@ -124,9 +127,9 @@ describe('TaskItemコンポーネントのテスト', () => {
       .mockImplementation(() => Promise.resolve());
 
     const { getByRole, getByTestId, queryByTestId } = render(
-      <Provider store={store}>
-        <TaskItem id="123" title="test-task" deadline="2021-01-01" isDone />
-      </Provider>,
+      reduxProvider(
+        <TaskItem id="123" title="test-task" deadline="2021-01-01" isDone />,
+      ),
     );
 
     const buttonElement = getByRole('button');
@@ -149,9 +152,9 @@ describe('TaskItemコンポーネントのテスト', () => {
       .mockImplementation(() => Promise.reject());
 
     const { getByRole, getByTestId, queryByTestId } = render(
-      <Provider store={store}>
-        <TaskItem id="123" title="test-task" deadline="2021-01-01" isDone />
-      </Provider>,
+      reduxProvider(
+        <TaskItem id="123" title="test-task" deadline="2021-01-01" isDone />,
+      ),
     );
 
     const buttonElement = getByRole('button');
