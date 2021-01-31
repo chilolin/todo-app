@@ -1,50 +1,30 @@
 import React, { FC } from 'react';
 import styled from 'styled-components';
-import TextField from '@material-ui/core/TextField';
 
+import TodoForm from 'components/molecules/TodoForm';
 import SpinnerButton from 'components/molecules/SpinnerButton';
 
 type Props = {
   isLoading: boolean;
+  isError: boolean;
   title: string;
   deadline?: string;
-  handleTaskCreatedSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
+  handleTaskCreated: (event: React.FormEvent<HTMLFormElement>) => void;
   handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
 const CreateForm: FC<Props> = ({
   isLoading = false,
+  isError = false,
   title = '',
   deadline = undefined,
-  handleTaskCreatedSubmit = () => undefined,
+  handleTaskCreated = () => undefined,
   handleChange = () => undefined,
 }) => (
-  <FormWrapper onSubmit={handleTaskCreatedSubmit}>
+  <FormWrapper onSubmit={handleTaskCreated} data-testid="create-form">
+    {isError && <div data-testid="error">エラーが発生しました</div>}
     <FormContents>
-      <TextField
-        id="create-title"
-        label="やる事"
-        value={title}
-        onChange={handleChange}
-        name="title"
-        InputLabelProps={{
-          shrink: true,
-        }}
-        disabled={isLoading}
-        required
-      />
-      <TextField
-        id="create-date"
-        label="期日"
-        type="date"
-        value={deadline}
-        onChange={handleChange}
-        name="deadline"
-        InputLabelProps={{
-          shrink: true,
-        }}
-        disabled={isLoading}
-      />
+      <TodoForm {...{ isLoading, title, deadline, handleChange }} />
     </FormContents>
     <FormActions>
       <SpinnerButton isLoading={isLoading} type="submit" color="primary">

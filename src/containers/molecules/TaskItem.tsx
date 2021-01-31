@@ -20,6 +20,7 @@ const EnhancedTaskItem: FC<Props> = ({
 }) => {
   const [isUnmounted, setIsUnmounted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -30,9 +31,7 @@ const EnhancedTaskItem: FC<Props> = ({
     };
   }, []);
 
-  const handleTaskDoneClick = async (
-    event: React.MouseEvent<HTMLButtonElement>,
-  ) => {
+  const handleTaskDone = async (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     setIsLoading(true);
 
@@ -42,15 +41,13 @@ const EnhancedTaskItem: FC<Props> = ({
         dispatch(taskDone(id));
       }
     } catch (error) {
-      throw new Error('task done Error');
+      setIsError(true);
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleTaskTodoClick = async (
-    event: React.MouseEvent<HTMLButtonElement>,
-  ) => {
+  const handleTaskTodo = async (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     setIsLoading(true);
 
@@ -60,7 +57,7 @@ const EnhancedTaskItem: FC<Props> = ({
         dispatch(taskTodo(id));
       }
     } catch (error) {
-      throw new Error('task todo Error');
+      setIsError(true);
     } finally {
       setIsLoading(false);
     }
@@ -70,12 +67,13 @@ const EnhancedTaskItem: FC<Props> = ({
     <TaskItem
       {...{
         isLoading,
+        isError,
         id,
         title,
         deadline,
         isDone,
-        handleTaskDoneClick,
-        handleTaskTodoClick,
+        handleTaskDone,
+        handleTaskTodo,
       }}
     />
   );

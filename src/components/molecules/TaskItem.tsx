@@ -9,22 +9,24 @@ import EditFormDialog from 'containers/molecules/EditFormDialog';
 
 type Props = {
   isLoading: boolean;
+  isError: boolean;
   id: string;
   title: string;
   deadline?: string;
   isDone?: boolean;
-  handleTaskDoneClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
-  handleTaskTodoClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  handleTaskDone: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  handleTaskTodo: (event: React.MouseEvent<HTMLButtonElement>) => void;
 };
 
 const TaskItem: FC<Props> = ({
   isLoading = false,
+  isError = false,
   id = '',
   title = '',
   deadline = undefined,
   isDone = false,
-  handleTaskDoneClick = () => undefined,
-  handleTaskTodoClick = () => undefined,
+  handleTaskDone = () => undefined,
+  handleTaskTodo = () => undefined,
 }) => (
   <>
     {isLoading ? (
@@ -38,7 +40,7 @@ const TaskItem: FC<Props> = ({
             variant="contained"
             color="primary"
             startIcon={<FastRewindIcon />}
-            onClick={handleTaskTodoClick}
+            onClick={handleTaskTodo}
           >
             TODO
           </Button>
@@ -49,12 +51,13 @@ const TaskItem: FC<Props> = ({
               variant="contained"
               color="primary"
               endIcon={<FastForwardIcon />}
-              onClick={handleTaskDoneClick}
+              onClick={handleTaskDone}
             >
               DONE
             </Button>
           </ButtonWrapper>
         )}
+        {isError && <div data-testid="error">エラーが発生しました</div>}
       </ItemWrapper>
     )}
   </>
