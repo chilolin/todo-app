@@ -31,6 +31,10 @@ const EnhancedTaskItem: FC<Props> = ({
     };
   }, []);
 
+  const handleError = () => {
+    setIsError(false);
+  };
+
   const handleTaskDone = async (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     setIsLoading(true);
@@ -72,6 +76,7 @@ const EnhancedTaskItem: FC<Props> = ({
         title,
         deadline,
         isDone,
+        handleError,
         handleTaskDone,
         handleTaskTodo,
       }}

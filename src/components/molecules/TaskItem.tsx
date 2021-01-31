@@ -6,6 +6,7 @@ import FastForwardIcon from '@material-ui/icons/FastForward';
 import FastRewindIcon from '@material-ui/icons/FastRewind';
 
 import EditFormDialog from 'containers/molecules/EditFormDialog';
+import Snackbars from 'components/molecules/Snackbars';
 
 type Props = {
   isLoading: boolean;
@@ -14,6 +15,7 @@ type Props = {
   title: string;
   deadline?: string;
   isDone?: boolean;
+  handleError: () => void;
   handleTaskDone: (event: React.MouseEvent<HTMLButtonElement>) => void;
   handleTaskTodo: (event: React.MouseEvent<HTMLButtonElement>) => void;
 };
@@ -25,6 +27,7 @@ const TaskItem: FC<Props> = ({
   title = '',
   deadline = undefined,
   isDone = false,
+  handleError = () => undefined,
   handleTaskDone = () => undefined,
   handleTaskTodo = () => undefined,
 }) => (
@@ -57,7 +60,7 @@ const TaskItem: FC<Props> = ({
             </Button>
           </ButtonWrapper>
         )}
-        {isError && <div data-testid="error">エラーが発生しました</div>}
+        {isError && <Snackbars open={isError} handleClose={handleError} />}
       </ItemWrapper>
     )}
   </>

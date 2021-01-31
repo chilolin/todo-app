@@ -41,6 +41,10 @@ const EnhancedEditFormDialog: FC<{ id: string }> = ({ id = '' }) => {
     setIsOpen(false);
   };
 
+  const handleError = () => {
+    setIsError(false);
+  };
+
   const handleTaskUpdated = async (
     event: React.MouseEvent<HTMLButtonElement>,
   ) => {
@@ -99,6 +103,7 @@ const EnhancedEditFormDialog: FC<{ id: string }> = ({ id = '' }) => {
         deadline,
         handleOpen,
         handleClose,
+        handleError,
         handleTaskUpdated,
         handleTaskDeleted,
         handleChange,

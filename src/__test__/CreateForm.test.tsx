@@ -55,12 +55,18 @@ jest.mock(
   ),
 );
 
+jest.mock('components/molecules/Snackbars', () => () => (
+  <div data-testid="error">Snackbars</div>
+));
+
 describe('CreateForm', () => {
   describe('component のテスト', () => {
+    const mockHandleError = jest.fn();
     const mockHandleTaskCreated = jest.fn();
     const mockHandleChange = jest.fn();
 
     beforeEach(() => {
+      mockHandleError.mockReset();
       mockHandleTaskCreated.mockReset();
       mockHandleChange.mockReset();
     });
@@ -76,6 +82,7 @@ describe('CreateForm', () => {
           isError={false}
           title=""
           deadline=""
+          handleError={mockHandleError}
           handleTaskCreated={mockHandleTaskCreated}
           handleChange={mockHandleChange}
         />,
@@ -91,6 +98,7 @@ describe('CreateForm', () => {
           isError
           title=""
           deadline=""
+          handleError={mockHandleError}
           handleTaskCreated={mockHandleTaskCreated}
           handleChange={mockHandleChange}
         />,
@@ -106,6 +114,7 @@ describe('CreateForm', () => {
           isError={false}
           title=""
           deadline=""
+          handleError={mockHandleError}
           handleTaskCreated={mockHandleTaskCreated}
           handleChange={mockHandleChange}
         />,
@@ -122,6 +131,7 @@ describe('CreateForm', () => {
           isError={false}
           title=""
           deadline=""
+          handleError={mockHandleError}
           handleTaskCreated={mockHandleTaskCreated}
           handleChange={mockHandleChange}
         />,

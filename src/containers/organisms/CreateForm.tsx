@@ -28,6 +28,10 @@ const EnhancedCreateForm: FC = () => {
 
   const { title, deadline } = createdTask;
 
+  const handleError = () => {
+    setIsError(false);
+  };
+
   const handleTaskCreated = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setIsLoading(true);
@@ -63,6 +67,7 @@ const EnhancedCreateForm: FC = () => {
         isError,
         title,
         deadline,
+        handleError,
         handleTaskCreated,
         handleChange,
       }}
