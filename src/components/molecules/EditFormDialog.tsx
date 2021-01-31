@@ -8,6 +8,7 @@ import EditIcon from '@material-ui/icons/Edit';
 
 import TodoForm from 'components/molecules/TodoForm';
 import SpinnerButton from 'components/molecules/SpinnerButton';
+import Snackbars from 'components/molecules/Snackbars';
 
 type Props = {
   isLoading: boolean;
@@ -17,6 +18,7 @@ type Props = {
   deadline?: string;
   handleOpen: () => void;
   handleClose: () => void;
+  handleError: () => void;
   handleTaskUpdated: (event: React.MouseEvent<HTMLButtonElement>) => void;
   handleTaskDeleted: (event: React.MouseEvent<HTMLButtonElement>) => void;
   handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
@@ -30,6 +32,7 @@ const EditFormDialog: FC<Props> = ({
   deadline = '',
   handleOpen = () => undefined,
   handleClose = () => undefined,
+  handleError = () => undefined,
   handleTaskUpdated = () => undefined,
   handleTaskDeleted = () => undefined,
   handleChange = () => undefined,
@@ -51,7 +54,6 @@ const EditFormDialog: FC<Props> = ({
         aria-labelledby="form-dialog-title"
         data-testid="dialog"
       >
-        {isError && <div data-testid="error">エラーが発生しました</div>}
         <DialogTitle id="form-dialog-title">編集</DialogTitle>
         <DialogContent>
           <TodoForm {...{ isLoading, title, deadline, handleChange }} />
@@ -72,6 +74,7 @@ const EditFormDialog: FC<Props> = ({
             削除する
           </SpinnerButton>
         </DialogActions>
+        {isError && <Snackbars open={isError} handleClose={handleError} />}
       </Dialog>
     ) : null}
   </>

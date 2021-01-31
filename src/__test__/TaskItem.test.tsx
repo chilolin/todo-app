@@ -16,12 +16,18 @@ jest.mock('containers/molecules/EditFormDialog', () => () => (
   <div>EditFormDialog</div>
 ));
 
+jest.mock('components/molecules/Snackbars', () => () => (
+  <div data-testid="error">Snackbars</div>
+));
+
 describe('TaskItem', () => {
   describe('component のテスト', () => {
+    const mockHandleError = jest.fn();
     const mockhandleTaskDone = jest.fn();
     const mockhandleTaskTodo = jest.fn();
 
     beforeEach(() => {
+      mockHandleError.mockReset();
       mockhandleTaskDone.mockReset();
       mockhandleTaskTodo.mockReset();
     });
@@ -39,6 +45,7 @@ describe('TaskItem', () => {
           title="task0"
           deadline="2021-01-01"
           isDone={false}
+          handleError={mockHandleError}
           handleTaskDone={mockhandleTaskDone}
           handleTaskTodo={mockhandleTaskTodo}
         />,
@@ -57,6 +64,7 @@ describe('TaskItem', () => {
           title="task0"
           deadline="2021-01-01"
           isDone={false}
+          handleError={mockHandleError}
           handleTaskDone={mockhandleTaskDone}
           handleTaskTodo={mockhandleTaskTodo}
         />,
@@ -77,6 +85,7 @@ describe('TaskItem', () => {
           title="task0"
           deadline="2021-01-01"
           isDone
+          handleError={mockHandleError}
           handleTaskDone={mockhandleTaskDone}
           handleTaskTodo={mockhandleTaskTodo}
         />,
@@ -97,6 +106,7 @@ describe('TaskItem', () => {
           title="task0"
           deadline="2021-01-01"
           isDone
+          handleError={mockHandleError}
           handleTaskDone={mockhandleTaskDone}
           handleTaskTodo={mockhandleTaskTodo}
         />,
@@ -114,6 +124,7 @@ describe('TaskItem', () => {
           title="task0"
           deadline="2021-01-01"
           isDone={false}
+          handleError={mockHandleError}
           handleTaskDone={mockhandleTaskDone}
           handleTaskTodo={mockhandleTaskTodo}
         />,
@@ -132,6 +143,7 @@ describe('TaskItem', () => {
           title="task0"
           deadline="2021-01-01"
           isDone
+          handleError={mockHandleError}
           handleTaskDone={mockhandleTaskDone}
           handleTaskTodo={mockhandleTaskTodo}
         />,

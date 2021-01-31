@@ -3,12 +3,14 @@ import styled from 'styled-components';
 
 import TodoForm from 'components/molecules/TodoForm';
 import SpinnerButton from 'components/molecules/SpinnerButton';
+import Snackbars from 'components/molecules/Snackbars';
 
 type Props = {
   isLoading: boolean;
   isError: boolean;
   title: string;
   deadline?: string;
+  handleError: () => void;
   handleTaskCreated: (event: React.FormEvent<HTMLFormElement>) => void;
   handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 };
@@ -18,11 +20,11 @@ const CreateForm: FC<Props> = ({
   isError = false,
   title = '',
   deadline = undefined,
+  handleError = () => undefined,
   handleTaskCreated = () => undefined,
   handleChange = () => undefined,
 }) => (
   <FormWrapper onSubmit={handleTaskCreated} data-testid="create-form">
-    {isError && <div data-testid="error">エラーが発生しました</div>}
     <FormContents>
       <TodoForm {...{ isLoading, title, deadline, handleChange }} />
     </FormContents>
@@ -31,6 +33,7 @@ const CreateForm: FC<Props> = ({
         追加する
       </SpinnerButton>
     </FormActions>
+    {isError && <Snackbars open={isError} handleClose={handleError} />}
   </FormWrapper>
 );
 

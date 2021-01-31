@@ -70,10 +70,15 @@ jest.mock(
   ),
 );
 
+jest.mock('components/molecules/Snackbars', () => () => (
+  <div data-testid="error">Snackbars</div>
+));
+
 describe('EditFormDialog', () => {
   describe('component のテスト', () => {
     const mockHandleOpen = jest.fn();
     const mockHandleClose = jest.fn();
+    const mockHandleError = jest.fn();
     const mockhandleTaskUpdated = jest.fn();
     const mockhandleTaskDeleted = jest.fn();
     const mockHandleChange = jest.fn();
@@ -81,6 +86,7 @@ describe('EditFormDialog', () => {
     beforeEach(() => {
       mockHandleOpen.mockReset();
       mockHandleClose.mockReset();
+      mockHandleError.mockReset();
       mockhandleTaskUpdated.mockReset();
       mockhandleTaskDeleted.mockReset();
       mockHandleChange.mockReset();
@@ -100,6 +106,7 @@ describe('EditFormDialog', () => {
           deadline="2021-01-01"
           handleOpen={mockHandleOpen}
           handleClose={mockHandleClose}
+          handleError={mockHandleError}
           handleTaskUpdated={mockhandleTaskUpdated}
           handleTaskDeleted={mockhandleTaskDeleted}
           handleChange={mockHandleChange}
@@ -121,6 +128,7 @@ describe('EditFormDialog', () => {
           deadline="2021-01-01"
           handleOpen={mockHandleOpen}
           handleClose={mockHandleClose}
+          handleError={mockHandleError}
           handleTaskUpdated={mockhandleTaskUpdated}
           handleTaskDeleted={mockhandleTaskDeleted}
           handleChange={mockHandleChange}
@@ -142,6 +150,7 @@ describe('EditFormDialog', () => {
           deadline="2021-01-01"
           handleOpen={mockHandleOpen}
           handleClose={mockHandleClose}
+          handleError={mockHandleError}
           handleTaskUpdated={mockhandleTaskUpdated}
           handleTaskDeleted={mockhandleTaskDeleted}
           handleChange={mockHandleChange}
@@ -161,6 +170,7 @@ describe('EditFormDialog', () => {
           deadline=""
           handleOpen={mockHandleOpen}
           handleClose={mockHandleClose}
+          handleError={mockHandleError}
           handleTaskUpdated={mockhandleTaskUpdated}
           handleTaskDeleted={mockhandleTaskDeleted}
           handleChange={mockHandleChange}
@@ -187,6 +197,7 @@ describe('EditFormDialog', () => {
           deadline="2021-01-01"
           handleOpen={mockHandleOpen}
           handleClose={mockHandleClose}
+          handleError={mockHandleError}
           handleTaskUpdated={mockhandleTaskUpdated}
           handleTaskDeleted={mockhandleTaskDeleted}
           handleChange={mockHandleChange}
@@ -212,6 +223,7 @@ describe('EditFormDialog', () => {
           deadline=""
           handleOpen={mockHandleOpen}
           handleClose={mockHandleClose}
+          handleError={mockHandleError}
           handleTaskUpdated={mockhandleTaskUpdated}
           handleTaskDeleted={mockhandleTaskDeleted}
           handleChange={mockHandleChange}
@@ -232,6 +244,7 @@ describe('EditFormDialog', () => {
           deadline="2021-01-01"
           handleOpen={mockHandleOpen}
           handleClose={mockHandleClose}
+          handleError={mockHandleError}
           handleTaskUpdated={mockhandleTaskUpdated}
           handleTaskDeleted={mockhandleTaskDeleted}
           handleChange={mockHandleChange}
@@ -252,6 +265,7 @@ describe('EditFormDialog', () => {
           deadline="2021-01-01"
           handleOpen={mockHandleOpen}
           handleClose={mockHandleClose}
+          handleError={mockHandleError}
           handleTaskUpdated={mockhandleTaskUpdated}
           handleTaskDeleted={mockhandleTaskDeleted}
           handleChange={mockHandleChange}
