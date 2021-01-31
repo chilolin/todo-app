@@ -4,117 +4,226 @@ import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
 import { cleanup, render, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import todoSlice from 'features/todo/todoSlice';
+import todoSlice, * as reducers from 'features/todo/todoSlice';
 import * as firebaseUtils from 'firebase/utils';
 
-import CreateForm from 'containers/organisms/CreateForm';
-
-const reduxProvider = (WrappedComponent: JSX.Element) => {
-  const middleware = getDefaultMiddleware({ serializableCheck: false });
-  const store = configureStore({
-    reducer: todoSlice,
-    middleware,
-  });
-
-  return <Provider store={store}>{WrappedComponent}</Provider>;
-};
+import CreateForm from 'components/organisms/CreateForm';
+import EnhancedCreateForm from 'containers/organisms/CreateForm';
 
 jest.mock('firebase/utils');
 
 jest.mock(
-  'components/molecules/SpinnerButton',
+  'components/molecules/TodoForm',
   () => ({
-    children,
-    color,
-    isLoading,
+    title,
+    deadline,
+    handleChange,
   }: {
-    children: string;
-    color: string;
-    isLoading: boolean;
+    title: string;
+    deadline: string;
+    handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   }) => (
-    <button type="submit" color={color} disabled={isLoading}>
+    <>
+      <label htmlFor="create-title">
+        やる事
+        <input
+          id="create-title"
+          name="title"
+          value={title}
+          onChange={handleChange}
+        />
+      </label>
+      <label htmlFor="create-deadline">
+        期日
+        <input
+          id="create-deadline"
+          name="deadline"
+          value={deadline}
+          onChange={handleChange}
+        />
+      </label>
+    </>
+  ),
+);
+
+jest.mock(
+  'components/molecules/SpinnerButton',
+  () => ({ children, isLoading }: { children: string; isLoading: boolean }) => (
+    <button type="submit" disabled={isLoading}>
       {children}
     </button>
   ),
 );
 
-describe('CreateFormコンポーネントのテスト', () => {
-  afterEach(() => {
-    cleanup();
-  });
+describe('CreateForm', () => {
+  describe('component のテスト', () => {
+    const mockHandleTaskCreated = jest.fn();
+    const mockHandleChange = jest.fn();
 
-  test('レンダリングする', () => {
-    const { getByLabelText, getByRole } = render(reduxProvider(<CreateForm />));
-
-    expect(getByLabelText(/やる事/)).toBeInTheDocument();
-    expect(getByLabelText(/期日/)).toBeInTheDocument();
-    expect(getByRole('button')).toBeInTheDocument();
-  });
-
-  test('フォームに入力する', () => {
-    const { getByLabelText } = render(reduxProvider(<CreateForm />));
-
-    const titleInputElement = getByLabelText(/やる事/) as HTMLInputElement;
-    const dateInputElement = getByLabelText(/期日/) as HTMLInputElement;
-
-    userEvent.type(titleInputElement, 'test-task');
-    userEvent.type(dateInputElement, '2021-01-26');
-
-    expect(titleInputElement).toHaveValue('test-task');
-    expect(dateInputElement).toHaveValue('2021-01-26');
-  });
-
-  test('追加するボタンを押す', async () => {
-    const taskCreatedStub = jest
-      .spyOn(firebaseUtils, 'firebaseTaskCreated')
-      .mockImplementation(() => Promise.resolve('123'));
-
-    const { getByLabelText, getByRole } = render(reduxProvider(<CreateForm />));
-
-    const titleInputElement = getByLabelText(/やる事/) as HTMLInputElement;
-    const dateInputElement = getByLabelText(/期日/) as HTMLInputElement;
-    const buttonElement = getByRole('button') as HTMLButtonElement;
-
-    userEvent.type(titleInputElement, 'test-task');
-    userEvent.type(dateInputElement, '2021-01-26');
-
-    expect(titleInputElement.value).toEqual('test-task');
-    expect(dateInputElement.value).toEqual('2021-01-26');
-
-    userEvent.click(buttonElement);
-
-    expect(titleInputElement.disabled).toEqual(true);
-    expect(dateInputElement.disabled).toEqual(true);
-    expect(buttonElement.disabled).toEqual(true);
-
-    await waitFor(() => {
-      expect(taskCreatedStub).toHaveBeenCalled();
+    beforeEach(() => {
+      mockHandleTaskCreated.mockReset();
+      mockHandleChange.mockReset();
     });
 
-    expect(titleInputElement.value).toEqual('');
-    expect(dateInputElement.value).toEqual('');
-    expect(titleInputElement.disabled).toEqual(false);
-    expect(dateInputElement.disabled).toEqual(false);
-    expect(buttonElement.disabled).toEqual(false);
-  });
-
-  test('firebaseがエラーを返す', async () => {
-    const firebaseTaskCreatedStub = jest
-      .spyOn(firebaseUtils, 'firebaseTaskCreated')
-      .mockImplementation(() => Promise.reject());
-
-    const { getByRole } = render(reduxProvider(<CreateForm />));
-
-    const buttonElement = getByRole('button') as HTMLButtonElement;
-
-    userEvent.click(buttonElement);
-
-    expect(buttonElement.disabled).toEqual(true);
-
-    await waitFor(() => {
-      expect(firebaseTaskCreatedStub).toHaveBeenCalled();
+    afterEach(() => {
+      cleanup();
     });
 
-    expect(buttonElement.disabled).toEqual(false);
+    test('レンダリングする', () => {
+      const { getByTestId } = render(
+        <CreateForm
+          isLoading={false}
+          isError={false}
+          title=""
+          deadline=""
+          handleTaskCreated={mockHandleTaskCreated}
+          handleChange={mockHandleChange}
+        />,
+      );
+
+      expect(getByTestId('create-form')).toBeInTheDocument();
+    });
+
+    test('エラー発生時のレンダリング', () => {
+      const { getByTestId } = render(
+        <CreateForm
+          isLoading={false}
+          isError
+          title=""
+          deadline=""
+          handleTaskCreated={mockHandleTaskCreated}
+          handleChange={mockHandleChange}
+        />,
+      );
+
+      expect(getByTestId('error')).toBeInTheDocument();
+    });
+
+    test('ボタンを押す処理', () => {
+      const { getByRole } = render(
+        <CreateForm
+          isLoading={false}
+          isError={false}
+          title=""
+          deadline=""
+          handleTaskCreated={mockHandleTaskCreated}
+          handleChange={mockHandleChange}
+        />,
+      );
+
+      userEvent.click(getByRole('button'));
+      expect(mockHandleTaskCreated).toHaveBeenCalled();
+    });
+
+    test('ローディング中はボタンを押すことができない', () => {
+      const { getByRole } = render(
+        <CreateForm
+          isLoading
+          isError={false}
+          title=""
+          deadline=""
+          handleTaskCreated={mockHandleTaskCreated}
+          handleChange={mockHandleChange}
+        />,
+      );
+
+      userEvent.click(getByRole('button'));
+      expect(mockHandleTaskCreated).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('container のテスト', () => {
+    const reduxProvider = (WrappedComponent: JSX.Element) => {
+      const middleware = getDefaultMiddleware({ serializableCheck: false });
+      const store = configureStore({
+        reducer: todoSlice,
+        middleware,
+      });
+
+      return <Provider store={store}>{WrappedComponent}</Provider>;
+    };
+
+    afterEach(() => {
+      cleanup();
+    });
+
+    test('フォームに入力する処理', () => {
+      const { getByLabelText } = render(reduxProvider(<EnhancedCreateForm />));
+
+      const titleInputElement = getByLabelText('やる事') as HTMLInputElement;
+      const deadlineInputElement = getByLabelText('期日') as HTMLInputElement;
+
+      userEvent.type(titleInputElement, 'task0');
+      expect(titleInputElement).toHaveValue('task0');
+
+      userEvent.clear(titleInputElement);
+      expect(titleInputElement).toHaveValue('');
+
+      userEvent.type(deadlineInputElement, '2021-01-01');
+      expect(deadlineInputElement).toHaveValue('2021-01-01');
+
+      userEvent.clear(deadlineInputElement);
+      expect(deadlineInputElement).toHaveValue('');
+    });
+
+    test('ボタンを押す処理', async () => {
+      const mockTaskCreated = jest.spyOn(reducers, 'taskCreated');
+      const mockFirebaseTaskCreated = jest
+        .spyOn(firebaseUtils, 'firebaseTaskCreated')
+        .mockImplementation(() => Promise.resolve('123'));
+
+      const { getByLabelText, getByRole } = render(
+        reduxProvider(<EnhancedCreateForm />),
+      );
+
+      const titleInputElement = getByLabelText('やる事') as HTMLInputElement;
+      const deadlineInputElement = getByLabelText('期日') as HTMLInputElement;
+      const buttonElement = getByRole('button') as HTMLButtonElement;
+
+      userEvent.type(titleInputElement, 'task0');
+      expect(titleInputElement).toHaveValue('task0');
+
+      userEvent.type(deadlineInputElement, '2021-01-01');
+      expect(deadlineInputElement).toHaveValue('2021-01-01');
+
+      userEvent.click(buttonElement);
+      expect(buttonElement.disabled).toEqual(true);
+      await waitFor(() => {
+        expect(mockFirebaseTaskCreated).toHaveBeenCalled();
+      });
+      expect(mockTaskCreated).toHaveBeenCalled();
+      expect(titleInputElement).toHaveValue('');
+      expect(deadlineInputElement).toHaveValue('');
+      expect(buttonElement.disabled).toEqual(false);
+    });
+
+    test('firebaseがエラーを返す', async () => {
+      const mockTaskCreated = jest.spyOn(reducers, 'taskCreated');
+      const mockFirebaseTaskCreated = jest
+        .spyOn(firebaseUtils, 'firebaseTaskCreated')
+        .mockImplementation(() => Promise.reject());
+
+      const { getByLabelText, getByRole, getByTestId, queryByTestId } = render(
+        reduxProvider(<EnhancedCreateForm />),
+      );
+
+      const inputElement = getByLabelText('やる事');
+
+      userEvent.type(inputElement, 'task0');
+      expect(inputElement).toHaveValue('task0');
+
+      const buttonElement = getByRole('button') as HTMLButtonElement;
+
+      userEvent.click(buttonElement);
+      expect(queryByTestId('error')).not.toBeInTheDocument();
+      expect(buttonElement.disabled).toEqual(true);
+      await waitFor(() => {
+        expect(mockFirebaseTaskCreated).toHaveBeenCalled();
+      });
+      expect(mockTaskCreated).not.toHaveBeenCalled();
+      expect(inputElement).toHaveValue('task0');
+      expect(getByTestId('error')).toBeInTheDocument();
+      expect(buttonElement.disabled).toEqual(false);
+    });
   });
 });

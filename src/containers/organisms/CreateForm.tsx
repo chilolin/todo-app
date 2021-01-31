@@ -7,7 +7,8 @@ import CreateForm from 'components/organisms/CreateForm';
 
 const EnhancedCreateForm: FC = () => {
   const [isUnmounted, setIsUnmounted] = useState(false);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
   const [createdTask, setCreatedTask] = useState<{
     title: string;
     deadline?: string;
@@ -27,9 +28,7 @@ const EnhancedCreateForm: FC = () => {
 
   const { title, deadline } = createdTask;
 
-  const handleTaskCreatedSubmit = async (
-    event: React.FormEvent<HTMLFormElement>,
-  ) => {
+  const handleTaskCreated = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setIsLoading(true);
 
@@ -43,8 +42,8 @@ const EnhancedCreateForm: FC = () => {
         title: '',
         deadline: '',
       });
-    } catch (error: unknown) {
-      throw new Error(`Create Task Error`);
+    } catch (error) {
+      setIsError(true);
     } finally {
       setIsLoading(false);
     }
@@ -59,7 +58,14 @@ const EnhancedCreateForm: FC = () => {
 
   return (
     <CreateForm
-      {...{ isLoading, title, deadline, handleTaskCreatedSubmit, handleChange }}
+      {...{
+        isLoading,
+        isError,
+        title,
+        deadline,
+        handleTaskCreated,
+        handleChange,
+      }}
     />
   );
 };

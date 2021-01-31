@@ -1,19 +1,20 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
+import { fetchTaskList, TaskList } from 'features/todo/todoSlice';
+import { RootState } from 'reducers';
 import { getTaskList } from 'firebase/utils';
-import { fetchTaskList, TaskList, TodoState } from 'features/todo/todoSlice';
 
 type ReturnValues = {
   isLoading: boolean;
-  doneList: TaskList;
   todoList: TaskList;
+  doneList: TaskList;
 };
 
 const useFetchTaskList = (): ReturnValues => {
   const [isLoading, setIsLoading] = useState(false);
-  const todoList = useSelector((state: TodoState) => state.todoList);
-  const doneList = useSelector((state: TodoState) => state.doneList);
+  const todoList = useSelector((state: RootState) => state.todo.todoList);
+  const doneList = useSelector((state: RootState) => state.todo.doneList);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -45,7 +46,7 @@ const useFetchTaskList = (): ReturnValues => {
     };
   }, [dispatch]);
 
-  return { isLoading, doneList, todoList };
+  return { isLoading, todoList, doneList };
 };
 
 export default useFetchTaskList;

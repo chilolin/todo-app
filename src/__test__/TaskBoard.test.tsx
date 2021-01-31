@@ -1,32 +1,11 @@
 import React from 'react';
 import { cleanup, render } from '@testing-library/react';
 
-import useFetchTaskList from 'hooks/use-fetch-task-list';
-
 import { TaskList } from 'features/todo/todoSlice';
 
-import TaskBoard from 'containers/organisms/TaskBoard';
-
-const taskList: TaskList = {
-  '123': {
-    id: '123',
-    title: 'test-task-1',
-    deadline: '2021-01-24',
-    createdAt: new Date(2021, 1, 24, 22, 44),
-  },
-  '456': {
-    id: '456',
-    title: 'test-task-2',
-    deadline: '2021-01-24',
-    createdAt: new Date(2021, 1, 24, 22, 44),
-  },
-};
+import TaskBoard from 'components/organisms/TaskBoard';
 
 jest.mock('firebase/utils');
-jest.mock('hooks/use-fetch-task-list');
-const useFetchTaskListStub = useFetchTaskList as jest.MockedFunction<
-  typeof useFetchTaskList
->;
 
 jest.mock(
   'containers/molecules/TaskItem',
@@ -37,42 +16,60 @@ jest.mock(
   ),
 );
 
-describe('TaskBoardコンポーネントのテスト', () => {
+describe('TaskBoard', () => {
+  const todoListStub: TaskList = {
+    '123': {
+      id: '123',
+      title: 'task1',
+      deadline: '2021-01-01',
+      createdAt: new Date(2021, 1, 1),
+    },
+    '456': {
+      id: '456',
+      title: 'task2',
+      deadline: '2021-01-02',
+      createdAt: new Date(2021, 1, 2),
+    },
+  };
+
+  const doneListStub: TaskList = {
+    '789': {
+      id: '789',
+      title: 'task3',
+      deadline: '2021-01-03',
+      createdAt: new Date(2021, 1, 3),
+    },
+  };
+
   afterEach(() => {
     cleanup();
   });
 
   test('データ取得前のレンダリング', () => {
-    useFetchTaskListStub.mockReturnValue({
-      isLoading: true,
-      todoList: taskList,
-      doneList: taskList,
-    });
-
-    const { getByTestId, queryByTestId, queryAllByTestId } = render(
-      <TaskBoard />,
+    const { getByTestId, queryByTestId } = render(
+      <TaskBoard isLoading todoList={todoListStub} doneList={doneListStub} />,
     );
 
     expect(getByTestId('circular')).toBeInTheDocument();
     expect(queryByTestId('board')).not.toBeInTheDocument();
-    expect(queryAllByTestId('123')).not.toHaveLength(2);
-    expect(queryAllByTestId('456')).not.toHaveLength(2);
+    expect(queryByTestId('123')).not.toBeInTheDocument();
+    expect(queryByTestId('456')).not.toBeInTheDocument();
+    expect(queryByTestId('789')).not.toBeInTheDocument();
   });
 
   test('データ取得後のレンダリング', () => {
-    useFetchTaskListStub.mockReturnValue({
-      isLoading: false,
-      todoList: taskList,
-      doneList: taskList,
-    });
-
-    const { getByTestId, getAllByTestId, queryByTestId } = render(
-      <TaskBoard />,
+    const { getByTestId, queryByTestId } = render(
+      <TaskBoard
+        isLoading={false}
+        todoList={todoListStub}
+        doneList={doneListStub}
+      />,
     );
 
     expect(queryByTestId('circular')).not.toBeInTheDocument();
     expect(getByTestId('board')).toBeInTheDocument();
-    expect(getAllByTestId('123')).toHaveLength(2);
-    expect(getAllByTestId('456')).toHaveLength(2);
+    expect(getByTestId('123')).toBeInTheDocument();
+    expect(getByTestId('456')).toBeInTheDocument();
+    expect(getByTestId('789')).toBeInTheDocument();
   });
 });
