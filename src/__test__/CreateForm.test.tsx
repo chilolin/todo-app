@@ -143,14 +143,14 @@ describe('CreateForm', () => {
   });
 
   describe('container のテスト', () => {
-    const reduxProvider = (WrappedComponent: JSX.Element) => {
+    const ReduxProvider = ({ children }: { children: JSX.Element }) => {
       const middleware = getDefaultMiddleware({ serializableCheck: false });
       const store = configureStore({
         reducer: todoSlice,
         middleware,
       });
 
-      return <Provider store={store}>{WrappedComponent}</Provider>;
+      return <Provider store={store}>{children}</Provider>;
     };
 
     afterEach(() => {
@@ -158,7 +158,11 @@ describe('CreateForm', () => {
     });
 
     test('フォームに入力する処理', () => {
-      const { getByLabelText } = render(reduxProvider(<EnhancedCreateForm />));
+      const { getByLabelText } = render(
+        <ReduxProvider>
+          <EnhancedCreateForm />
+        </ReduxProvider>,
+      );
 
       const titleInputElement = getByLabelText('やる事') as HTMLInputElement;
       const deadlineInputElement = getByLabelText('期日') as HTMLInputElement;
@@ -183,7 +187,9 @@ describe('CreateForm', () => {
         .mockImplementation(() => Promise.resolve('123'));
 
       const { getByLabelText, getByRole } = render(
-        reduxProvider(<EnhancedCreateForm />),
+        <ReduxProvider>
+          <EnhancedCreateForm />
+        </ReduxProvider>,
       );
 
       const titleInputElement = getByLabelText('やる事') as HTMLInputElement;
@@ -214,7 +220,9 @@ describe('CreateForm', () => {
         .mockImplementation(() => Promise.reject());
 
       const { getByLabelText, getByRole, getByTestId, queryByTestId } = render(
-        reduxProvider(<EnhancedCreateForm />),
+        <ReduxProvider>
+          <EnhancedCreateForm />
+        </ReduxProvider>,
       );
 
       const inputElement = getByLabelText('やる事');

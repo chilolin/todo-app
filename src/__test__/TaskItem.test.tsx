@@ -155,14 +155,14 @@ describe('TaskItem', () => {
   });
 
   describe('container のテスト', () => {
-    const reduxProvider = (WrappedComponent: JSX.Element) => {
+    const ReduxProvider = ({ children }: { children: JSX.Element }) => {
       const middleware = getDefaultMiddleware({ serializableCheck: false });
       const store = configureStore({
         reducer: todoSlice,
         middleware,
       });
 
-      return <Provider store={store}>{WrappedComponent}</Provider>;
+      return <Provider store={store}>{children}</Provider>;
     };
 
     afterEach(() => {
@@ -176,14 +176,14 @@ describe('TaskItem', () => {
         .mockImplementation(() => Promise.resolve());
 
       const { getByRole, getByTestId } = render(
-        reduxProvider(
+        <ReduxProvider>
           <EnhancedTaskItem
             id="123"
             title="task0"
             deadline="2021-01-01"
             isDone={false}
-          />,
-        ),
+          />
+        </ReduxProvider>,
       );
 
       userEvent.click(getByRole('button'));
@@ -202,14 +202,14 @@ describe('TaskItem', () => {
         .mockImplementation(() => Promise.reject());
 
       const { getByRole, getByTestId, queryByTestId } = render(
-        reduxProvider(
+        <ReduxProvider>
           <EnhancedTaskItem
             id="123"
             title="task0"
             deadline="2021-01-01"
             isDone={false}
-          />,
-        ),
+          />
+        </ReduxProvider>,
       );
 
       userEvent.click(getByRole('button'));
@@ -230,14 +230,14 @@ describe('TaskItem', () => {
         .mockImplementation(() => Promise.resolve());
 
       const { getByRole, getByTestId } = render(
-        reduxProvider(
+        <ReduxProvider>
           <EnhancedTaskItem
             id="123"
             title="task0"
             deadline="2021-01-01"
             isDone
-          />,
-        ),
+          />
+        </ReduxProvider>,
       );
 
       userEvent.click(getByRole('button'));
@@ -256,14 +256,14 @@ describe('TaskItem', () => {
         .mockImplementation(() => Promise.reject());
 
       const { getByRole, getByTestId, queryByTestId } = render(
-        reduxProvider(
+        <ReduxProvider>
           <EnhancedTaskItem
             id="123"
             title="task0"
             deadline="2021-01-01"
             isDone
-          />,
-        ),
+          />
+        </ReduxProvider>,
       );
 
       userEvent.click(getByRole('button'));

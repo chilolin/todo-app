@@ -292,13 +292,11 @@ describe('EditFormDialog', () => {
       },
     };
 
-    const reduxProvider = (WrappedComponent: JSX.Element) => {
+    const ReduxProvider = ({ children }: { children: JSX.Element }) => {
       const middleware = getDefaultMiddleware({ serializableCheck: false });
       const mockStore = configureStore(middleware);
 
-      return (
-        <Provider store={mockStore(initialState)}>{WrappedComponent}</Provider>
-      );
+      return <Provider store={mockStore(initialState)}>{children}</Provider>;
     };
 
     afterEach(() => {
@@ -307,7 +305,9 @@ describe('EditFormDialog', () => {
 
     test('編集ボタンを押すとダイアログが開く', () => {
       const { getByTestId, queryByTestId } = render(
-        reduxProvider(<EnhancedEditFormDialog id="123" />),
+        <ReduxProvider>
+          <EnhancedEditFormDialog id="123" />
+        </ReduxProvider>,
       );
 
       expect(getByTestId('edit-button')).toBeInTheDocument();
@@ -320,7 +320,9 @@ describe('EditFormDialog', () => {
 
     test('フォームに入力する処理', () => {
       const { getByTestId, getByLabelText } = render(
-        reduxProvider(<EnhancedEditFormDialog id="123" />),
+        <ReduxProvider>
+          <EnhancedEditFormDialog id="123" />
+        </ReduxProvider>,
       );
 
       userEvent.click(getByTestId('edit-button'));
@@ -348,7 +350,9 @@ describe('EditFormDialog', () => {
         .mockImplementation(() => Promise.resolve());
 
       const { getByTestId, queryByTestId } = render(
-        reduxProvider(<EnhancedEditFormDialog id="123" />),
+        <ReduxProvider>
+          <EnhancedEditFormDialog id="123" />
+        </ReduxProvider>,
       );
 
       userEvent.click(getByTestId('edit-button'));
@@ -372,7 +376,9 @@ describe('EditFormDialog', () => {
         .mockImplementation(() => Promise.reject());
 
       const { getByTestId, queryByTestId } = render(
-        reduxProvider(<EnhancedEditFormDialog id="123" />),
+        <ReduxProvider>
+          <EnhancedEditFormDialog id="123" />
+        </ReduxProvider>,
       );
 
       userEvent.click(getByTestId('edit-button'));
@@ -397,7 +403,9 @@ describe('EditFormDialog', () => {
         .mockImplementation(() => Promise.resolve());
 
       const { getByTestId, queryByTestId } = render(
-        reduxProvider(<EnhancedEditFormDialog id="123" />),
+        <ReduxProvider>
+          <EnhancedEditFormDialog id="123" />
+        </ReduxProvider>,
       );
 
       userEvent.click(getByTestId('edit-button'));
@@ -421,7 +429,9 @@ describe('EditFormDialog', () => {
         .mockImplementation(() => Promise.reject());
 
       const { getByTestId, queryByTestId } = render(
-        reduxProvider(<EnhancedEditFormDialog id="123" />),
+        <ReduxProvider>
+          <EnhancedEditFormDialog id="123" />
+        </ReduxProvider>,
       );
 
       userEvent.click(getByTestId('edit-button'));
