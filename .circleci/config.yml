@@ -2,7 +2,7 @@ version: 2.1
 jobs:
   build:
     docker:
-      - image: circleci/node:10-browsers
+      - image: circleci/node:14-browsers
     steps:
       - checkout
       - run:
@@ -19,3 +19,4 @@ jobs:
           name: 独自コンテナでの実行
           command: |
             node -v
+            yarn --version
