@@ -85,7 +85,7 @@ jobs:
 
 workflows:
   version: 2.1
-  workflow:
+  build-and-deploy:
     jobs:
       - shellcheck
       - build:
