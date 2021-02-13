@@ -5,6 +5,14 @@ jobs:
       - image: koalaman/shellcheck-alpine:stable
     steps:
       - checkout
+      - environment:
+        FIREBASE_API_KEY: $PROD_FIREBASE_API_KEY
+        FIREBASE_AUTH_DOMAIN: $PROD_FIREBASE_AUTH_DOMAIN
+        FIREBASE_PROJECT_ID: $PROD_FIREBASE_PROJECT_ID
+        FIREBASE_STORAGE_BUCKET: $PROD_FIREBASE_STORAGE_BUCKET
+        FIREBASE_MESSAGING_SENDER_ID: $PROD_FIREBASE_MESSAGING_SENDER_ID
+        FIREBASE_APP_ID: $PROD_FIREBASE_APP_ID
+        FIREBASE_MEASUREMENT: $PROD_FIREBASE_MEASUREMENT
       - run:
           name: スクリプトのチェック
           command: |
@@ -63,7 +71,7 @@ jobs:
       - image: circleci/node:14.4.0-browsers
     environment:
       FIREBASE_TOKEN: $FIREBASE_TOKEN
-      FIREBASE_PROJECT_ID: $FIREBASE
+      FIREBASE_PROJECT_ID: $FIREBASE_PROJECT_ID
     steps:
       - checkout
       - run:
@@ -82,11 +90,20 @@ workflows:
     jobs:
       - shellcheck
       - build-job:
+          branches:
+            only:
+              - $CIRCLE_BRANCH
           requires:
             - shellcheck
       - test:
+          branches:
+            only:
+              - $CIRCLE_BRANCH
           requires:
             - build-job
       - deploy:
+          branches:
+            only:
+              - $CIRCLE_BRANCH
           requires:
             - test
