@@ -92,18 +92,18 @@ workflows:
       - build-job:
           branches:
             only:
-              - $CIRCLE_BRANCH
+              - v1
           requires:
             - shellcheck
       - test:
           branches:
             only:
-              - $CIRCLE_BRANCH
+              - v1
           requires:
             - build-job
       - deploy:
           branches:
             only:
-              - $CIRCLE_BRANCH
+              - v1
           requires:
             - test
