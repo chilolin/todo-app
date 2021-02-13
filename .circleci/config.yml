@@ -11,7 +11,7 @@ jobs:
             find . -type f -name '*.sh' | wc -l
             find . -type f -name '*.sh' | xargs shellcheck --external-sources
 
-  build-job:
+  build:
     docker:
       - image: circleci/node:14.4.0
     steps:
@@ -88,7 +88,7 @@ workflows:
   workflow:
     jobs:
       - shellcheck
-      - build-job:
+      - build:
           branches:
             only:
               - v1
