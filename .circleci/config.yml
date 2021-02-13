@@ -1,0 +1,108 @@
+version: 2.1
+jobs:
+  shellcheck:
+    docker:
+      - image: koalaman/shellcheck-alpine:stable
+    steps:
+      - checkout
+      - run:
+          name: スクリプトのチェック
+          command: |
+            find . -type f -name '*.sh' | wc -l
+            find . -type f -name '*.sh' | xargs shellcheck --external-sources
+
+  build:
+    docker:
+      - image: circleci/node:14.4.0
+    steps:
+      - checkout
+      - run:
+          name: 環境変数のセットアップ
+          environment:
+            ENV_NAME: ./env.production
+            FIREBASE_API_KEY: $PROD_FIREBASE_API_KEY
+            FIREBASE_AUTH_DOMAIN: $PROD_FIREBASE_AUTH_DOMAIN
+            FIREBASE_PROJECT_ID: $PROD_FIREBASE_PROJECT_ID
+            FIREBASE_STORAGE_BUCKET: $PROD_FIREBASE_STORAGE_BUCKET
+            FIREBASE_MESSAGING_SENDER_ID: $PROD_FIREBASE_MESSAGING_SENDER_ID
+            FIREBASE_APP_ID: $PROD_FIREBASE_APP_ID
+            FIREBASE_MEASUREMENT: $PROD_FIREBASE_MEASUREMENT
+          command:
+            cd scripts
+            chmod +x ./env.sh
+            ./env.sh
+            cd .. && ls -al
+      - restore_cache:
+          keys:
+            - yarn-packages-v1-{{ .Branch }}-{{ checksum "yarn.lock" }}
+            - yarn-packages-v1-{{ .Branch }}-
+            - yarn-packages-v1-
+      - run:
+          name: dependencies のインストール
+          command: yarn install
+      - save_cache:
+          paths:
+            - ~/.cache/yarn
+          key: yarn-packages-v1-{{ .Branch }}-{{ checksum "yarn.lock" }}
+      - run:
+          name: リントチェック
+          command: yarn lint:fix
+      - run:
+          name: ビルド
+          command: yarn build-prod
+  
+  test:
+    docker:
+      - image: circleci/node:14.4.0-browsers
+    steps:
+      - checkout
+      - run:
+          name: テスト
+          command: |
+            cd src
+            yarn test
+      - run:
+          name: コードカバレッジの生成
+          command: yarn test --coverage
+  
+  deploy:
+    docker:
+      - image: circleci/node:14.4.0-browsers
+    environment:
+      FIREBASE_TOKEN: $FIREBASE_TOKEN
+      FIREBASE_PROJECT_ID: $FIREBASE_PROJECT_ID
+    steps:
+      - checkout
+      - run:
+          name: firebase-tools のインストール
+          command: yarn global add firebase-tools
+      - deploy:
+          name: hosting のデプロイ
+          command: |
+            cd scripts
+            chmod +x ./firebase.sh
+            ./firebase.sh
+
+workflows:
+  version: 2.1
+  build-and-deploy:
+    jobs:
+      - shellcheck
+      - build:
+          branches:
+            only:
+              - v1
+          requires:
+            - shellcheck
+      - test:
+          branches:
+            only:
+              - v1
+          requires:
+            - build-job
+      - deploy:
+          branches:
+            only:
+              - v1
+          requires:
+            - test
